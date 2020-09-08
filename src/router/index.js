@@ -2,13 +2,27 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 
+import AppIndex from '@/components/home/AppIndex'
+import Login from '@/components/Login'
+
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "Home",
+    redirect: './home',
     component: Home
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/index',
+    name: 'AppIndex',
+    component: AppIndex
   },
   {
     path: "/about",
@@ -22,6 +36,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  mode: 'hash',
   routes
 });
 
