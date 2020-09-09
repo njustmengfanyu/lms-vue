@@ -1,8 +1,11 @@
-import Vue from "vue";
+import Vue from "vue/dist/vue.esm.js";
 import App from "./App";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
+import VueRouter from "vue-router";
+
+Vue.use(VueRouter);
 
 var axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:8998/api'
@@ -11,16 +14,20 @@ Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false;
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
-
 // new Vue({
+//   render: h => h(App),
+//   el: '#app',
 //   router,
 //   store,
-//   render: h => h(App)
-// }).$mount("#app");
+//   components: { App },
+//   template: '<App/>'
+// }).$mount("#app")
+
+new Vue({
+  router,
+  el: '#app',
+  store,
+  components: { App },
+  template: '<App/>',
+  render: h => h(App)
+}).$mount("#app");
