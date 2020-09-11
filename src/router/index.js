@@ -31,12 +31,15 @@ const routes = [
   {
     path: '/index',
     name: 'AppIndex',
-    component: AppIndex
+    component: AppIndex,
+    meta: {
+      requireAuth: true
+    }
   }
 ];
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   routes: routes
 });
 

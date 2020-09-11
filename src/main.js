@@ -4,6 +4,8 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import VueRouter from "vue-router";
+import ElementUi from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(VueRouter);
 
@@ -14,6 +16,8 @@ Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false;
 
+Vue.use(ElementUi)
+
 // new Vue({
 //   render: h => h(App),
 //   el: '#app',
@@ -23,11 +27,26 @@ Vue.config.productionTip = false;
 //   template: '<App/>'
 // }).$mount("#app")
 
+router.beforeEach((to, from, next) => {
+        if (to.meta.requireAuth) {
+            if (store.state.user.username) {
+                next()
+            } else {
+                next({
+                    path: 'login',
+                    query: {redirect: to.fullPath}
+                })
+            }
+        } else {
+            next()
+        }
+    }
+)
 new Vue({
-  router,
-  el: '#app',
-  store,
-  components: { App },
-  template: '<App/>',
-  render: h => h(App)
+    el: '#app',
+    render: h => h(App),
+    router,
+    store,
+    components: {App},
+    template: '<App/>'
 }).$mount("#app");
