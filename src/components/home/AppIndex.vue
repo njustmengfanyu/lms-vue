@@ -1,6 +1,6 @@
 <template>
     <div>
-        Hello World!
+        登陆成功！
     </div>
 </template>
 
