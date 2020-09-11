@@ -32,6 +32,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * 受到后端返回的成功代码时，触发store中的login()方法，把loginForm对象传递给store中的user对象
+         * 获取登录前页面的路径并跳转，如果该路径不存在，则跳转到首页
+         */
         login() {
             let _this = this;
             console.log(this.$store.state)
