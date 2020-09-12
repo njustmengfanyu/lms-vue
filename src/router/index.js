@@ -1,18 +1,38 @@
-import Vue from "vue";
+import Vue from "vue/dist/vue.esm.js";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Home from "../components/Home.vue";
 
 import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
+import LibraryIndex from '../components/library/LibraryIndex'
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "Home",
     //redirect: './home',
-    component: Home
+    component: Home,
+    redirect: '/index',
+    children: [
+      {
+        path: '/index',
+        name: 'AppIndex',
+        component: AppIndex,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: '/library',
+        name: 'LibraryIndex',
+        component: LibraryIndex,
+        meta: {
+          requireAuth: true
+        }
+      }
+    ]
   },
   {
     path: "/about",
@@ -28,14 +48,14 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  {
-    path: '/index',
-    name: 'AppIndex',
-    component: AppIndex,
-    meta: {
-      requireAuth: true
-    }
-  }
+  // {
+  //   path: '/index',
+  //   name: 'AppIndex',
+  //   component: AppIndex,
+  //   meta: {
+  //     requireAuth: true
+  //   }
+  // }
 ];
 
 const router = new VueRouter({
