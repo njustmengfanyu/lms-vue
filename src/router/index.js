@@ -58,9 +58,13 @@ const routes = [
   // }
 ];
 
+// 定义登录页面名称（为了方便理解才定义的）
+const LOGIN_PAGE_NAME = 'login'
+
 const router = new VueRouter({
   mode: 'history',
   routes: routes
 });
+
 
 export default router;

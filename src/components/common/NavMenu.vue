@@ -1,7 +1,7 @@
 <template>
 <!--   使用router模式时会在激活导航时以index为path进行跳转-->
     <el-menu
-        :default-active="'/index'"
+        :default-active="$route.path"
         router
         mode="horizontal"
         background-color="white"
@@ -27,7 +27,8 @@ export default {
                 {name: '/jotter', navItem: '笔记本'},
                 {name: '/library', navItem: '图书馆'},
                 {name: '/admin', navItem: '个人中心'}
-            ]
+            ],
+            activeIndex: ""
         }
     }
 }

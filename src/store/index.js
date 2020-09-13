@@ -1,5 +1,6 @@
 import Vue from "vue/dist/vue.esm.js";
 import Vuex from "vuex";
+import router from '@/router'
 
 Vue.use(Vuex);
 

@@ -2,6 +2,7 @@
     <el-menu
         class="categories"
         default-active="0"
+        @select="handleSelect"
         active-text-color="red">
         <el-menu-item index="0">
             <i class="el-icon-menu"></i>
@@ -36,7 +37,18 @@
 
 <script>
 export default {
-    name: 'SideMenu'
+    name: 'SideMenu',
+    data () {
+        return {
+            cid: ''
+        }
+    },
+    methods: {
+        handleSelect (key, keyPath) {
+            this.cid = key
+            this.$emit('indexSelect')
+        }
+    }
 }
 </script>
 
