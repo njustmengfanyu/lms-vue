@@ -1,5 +1,8 @@
 # lms-vue 
 
+# 后端地址
+https://github.com/njustmengfanyu/LibraryManagementSystem
+
 ## IDEA 2020.2.1开发
 
 ## 运行前准备
