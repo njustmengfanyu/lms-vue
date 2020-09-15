@@ -5,7 +5,10 @@ import Home from "../components/Home.vue";
 import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
 import LibraryIndex from '../components/library/LibraryIndex'
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(Element)
 Vue.use(VueRouter);
 
 const routes = [
@@ -48,14 +51,21 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  // {
-  //   path: '/index',
-  //   name: 'AppIndex',
-  //   component: AppIndex,
-  //   meta: {
-  //     requireAuth: true
-  //   }
-  // }
+  {
+    path: '/',
+    name: 'index',
+    redirect: '/index',
+    component: AppIndex,
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../components/Register')
+  },
+
 ];
 
 // 定义登录页面名称（为了方便理解才定义的）
