@@ -23,7 +23,7 @@
                           auto-complete="off" placeholder="E-Mail"></el-input>
             </el-form-item>
             <el-form-item style="width: 100%">
-                <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register(loginForm)" v-bind:disabled="loginForm.username === '' || loginForm.password === '' || loginForm.name === ''|| loginForm.phone === ''|| loginForm.email === ''">注册
+                <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register(loginForm)">注册
                 </el-button>
             </el-form-item>
         </el-form>

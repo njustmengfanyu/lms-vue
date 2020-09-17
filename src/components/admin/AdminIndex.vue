@@ -4,7 +4,7 @@
             <Header style="position: absolute;width: 98%;"></Header>
         </el-header>
         <el-container>
-            <el-aside style="height: 112%;margin-top: -80px;width: 250px">
+            <el-aside style="height: 100%;margin-top: 0;width: 250px">
                 <AdminMenu @indexSelect="listByCategory" ref="adminmenu"></AdminMenu>
             </el-aside>
             <el-main>
@@ -32,6 +32,7 @@ export default {
     },
     methods: {
         listByCategory() {
+            let _this = this;
 
         }
     }

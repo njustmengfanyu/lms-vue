@@ -44,7 +44,7 @@ const formatRoutes = (routes) => {
                     require(['./components/admin/' + route.component + '.vue'], resolve)
                 },
                 name: route.name,
-                name_zh: route.name_zh,
+                nameZh: route.nameZh,
                 iconCls: route.iconCls,
                 children: route.children
             }
