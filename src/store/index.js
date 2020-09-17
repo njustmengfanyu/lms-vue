@@ -11,15 +11,23 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: {
-      username: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username
-    }
+      username: window.localStorage.getItem('username') == null ? '' : JSON.parse(window.localStorage.getItem('username' || '[]')),
+      adminMenus: []
   },
   mutations: {
-    login (state, user) {
-      state.user = user
-      window.localStorage.setItem('user', JSON.stringify(user))
+    login (state, data) {
+      state.username = data
+      window.localStorage.setItem('username', JSON.stringify(data))
+    },
+    logout (state) {
+      state.username = ''
+      window.localStorage.removeItem('username')
+      state.adminMenus = []
+    },
+    initAdminMenu (state, menus) {
+      state.adminMenus = menus
     }
+
   },
   actions: {},
   modules: {}

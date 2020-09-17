@@ -1,13 +1,13 @@
 <template>
     <div id="poster">
-    <el-form class="login-container" label-position="left"
+    <el-form :model="loginForm" :rules="loginrule" class="login-container" label-position="left"
              label-width="0px">
         <h3 class="login_title">系统登录</h3>
-        <el-form-item>
-            <el-input type="text" v-model="loginForm.username"
+        <el-form-item prop="username">
+            <el-input type="text"  v-model="loginForm.username"
                       auto-complete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
             <el-input type="password" v-model="loginForm.password"
                       auto-complete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
@@ -27,6 +27,9 @@ export default {
             loginForm: {
                 username: '',
                 password: ''
+            },
+            loginrule: {
+                username: {require: true,message:"用户名不能为空"}
             },
             responseResult: []
         }
