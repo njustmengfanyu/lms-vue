@@ -23,7 +23,7 @@
                           auto-complete="off" placeholder="E-Mail"></el-input>
             </el-form-item>
             <el-form-item style="width: 100%">
-                <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register(loginForm)">注册
+                <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register('loginForm')">注册
                 </el-button>
             </el-form-item>
         </el-form>
@@ -57,8 +57,9 @@ export default {
             this.$refs[formName].validate((valid) => {
                 //参数合法，提交表单
                 if (valid) {
-                    this.$axios.post('http://localhost:8066/register', this.loginForm).then(function (resp) {
+                    this.$axios.post('/register', this.loginForm).then((resp) => {
                         if (resp.data.code === 200) {
+                            console.log(resp.data.code)
                             this.$alert('注册成功', '提示', {
                                 confirmButtonText: '确定'
                             })
@@ -66,6 +67,7 @@ export default {
                         }
                         //参数不合法，控制台打印信息
                         else {
+                            console.log(resp.data.code)
                             this.$alert(resp.data.message, '提示', {
                                 confirmButtonText: '确定'
                             })

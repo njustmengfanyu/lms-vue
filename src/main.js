@@ -19,16 +19,6 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUi)
 
-// new Vue({
-//   render: h => h(App),
-//   el: '#app',
-//   router,
-//   store,
-//   components: { App },
-//   template: '<App/>'
-// }).$mount("#app")
-
-
 const formatRoutes = (routes) => {
     let fmtRoutes = []
     if (routes) {
@@ -61,7 +51,10 @@ const initAdminMenu = (router, store) => {
     }
     axios.get('/menu').then(resp => {
         if (resp && resp.status === 200) {
-            let fmtRoutes = formatRoutes(resp.data.result);
+
+            console.log(resp.status + " " + resp.data + " " )
+            let fmtRoutes = formatRoutes(resp.data)
+            console.log(resp +" " + resp)
             router.addRoutes(fmtRoutes)
             store.commit('initAdminMenu', fmtRoutes)
         }
@@ -78,7 +71,7 @@ router.beforeEach((to, from, next) => {
         // 已登录状态下访问 login 页面直接跳转到后台首页
         if (store.state.username && to.path.startsWith('/login')) {
             next({
-                name: 'admin/dashboard'
+                path: 'admin'
             })
         }
         if (to.meta.requireAuth) {

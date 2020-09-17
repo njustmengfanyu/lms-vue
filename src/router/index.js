@@ -2,6 +2,7 @@ import Vue from "vue/dist/vue.esm.js";
 import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 
+
 import AdminIndex from "@/components/admin/AdminIndex";
 import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
@@ -56,7 +57,7 @@ const routes = [
         },
         children: [
             {
-                path: '/dashboard',
+                path: '/admin/dashboard',
                 name: 'Dashboard',
                 component: () => import('@/components/admin/dashboard/admin/index'),
                 meta: {
