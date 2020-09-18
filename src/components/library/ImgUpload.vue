@@ -2,7 +2,8 @@
     <el-upload
         class="img-upload"
         ref="upload"
-        action="http://localhost:8998/api/covers"
+        action="http://localhost:8998/api/admin/content/books/covers"
+        with-credentials
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :before-remove="beforeRemove"
