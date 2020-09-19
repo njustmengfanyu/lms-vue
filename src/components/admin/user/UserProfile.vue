@@ -237,12 +237,15 @@
 <template>
     <div>
         <div style="margin-bottom: 16px">
+            <div style="font-size: 24px; height: 30px; margin-bottom: 15px">
+                <a-space>用户管理 > 用户信息</a-space>
+            </div>
             <a-button class="editable-add-btn" @click="handleAdd">
-                Add
+                添加用户信息
             </a-button>
-            <span style="margin-right: 28px"></span>
+            <span style="margin-right: 24px"></span>
             <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="start">
-                Reload
+                重置页面
             </a-button>
             <span style="margin-left: 8px">
                 <template v-if="hasSelected">
@@ -263,7 +266,7 @@
             >
                 <a-input
                     v-ant-ref="c => (searchInput = c)"
-                    :placeholder="`Search ${column.dataIndex}`"
+                    :placeholder="`搜索 ${column.dataIndex}`"
                     :value="selectedKeys[0]"
                     style="width: 188px; margin-bottom: 8px; display: block;"
                     @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
@@ -276,10 +279,10 @@
                     style="width: 90px; margin-right: 8px"
                     @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
                 >
-                    Search
+                    搜索
                 </a-button>
                 <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">
-                    Reset
+                    重置
                 </a-button>
             </div>
             <a-icon
@@ -303,17 +306,17 @@
                 </span>
                 <template v-else>{{ text }}</template>
             </template>
-            <template slot="operation" slot-scope="text, record">
+            <template slot="operation_delete" slot-scope="text, record">
                 <a-popconfirm
                     v-if="data.length"
                     title="确定要删除吗?"
                     @confirm="() => onDelete(record.key)"
                 >
-                    <a href="javascript:;">Delete</a>
+                    <a href="javascript:;">删除</a>
                 </a-popconfirm>
             </template>
             <template
-                v-for="col in ['name', 'age', 'address']"
+                v-for="col in ['id', 'username', 'name', 'phone', 'email', 'status']"
                 :slot="col"
                 slot-scope="text, record, index"
             >
@@ -338,7 +341,7 @@
                         </a-popconfirm>
                     </span>
                     <span v-else>
-                        <a :disabled="editingKey !== ''" @click="() => edit(record.key)">Edit</a>
+                        <a :disabled="editingKey !== ''" @click="() => edit(record.key)">编辑</a>
                      </span>
                 </div>
             </template>
@@ -346,39 +349,24 @@
     </div>
 </template>
 <script>
-// const columns = [
-//     {
-//         title: 'Name',
-//         dataIndex: 'name',
-//     },
-//     {
-//         title: 'Age',
-//         dataIndex: 'age',
-//     },
-//     {
-//         title: 'Address',
-//         dataIndex: 'address',
-//     },
-//     {
-//         title: 'operation',
-//         dataIndex: 'operation',
-//         scopedSlots: {customRender: 'operation'},
-//     },
-// ];
 
 const data = [];
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i.toString(),
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`,
-    });
-}
-// import BulkRegistration from './BulkRegistration'
+// for (let i = 0; i < 6; i++) {
+//     data.push({
+//         key: i.toString(),
+//         id: `Edward King ${i}`,
+//         username: 32,
+//         name: `abc. ${i}`,
+//         phone: 111,
+//         email: '111@qq.com',
+//         status: 1
+//     });
+// }
+import BulkRegistration from './BulkRegistration'
+
 export default {
-    name: 'UserProfile',
-    // components: {BulkRegistration},
+    id: 'UserProfile',
+    components: {BulkRegistration},
     data() {
         this.cacheData = data.map(item => ({...item}));
         return {
@@ -386,11 +374,54 @@ export default {
             searchText: '',
             searchInput: null,
             searchedColumn: '',
-            count: 20,
             editingKey: '',
             columns: [
                 {
-                    title: 'Name',
+                    title: 'id',
+                    dataIndex: 'id',
+                    key: 'id',
+                    scopedSlots: {
+                        filterDropdown: 'filterDropdown',
+                        filterIcon: 'filterIcon',
+                        customRender: 'id',
+                    },
+                    onFilter: (value, record) =>
+                        record.id
+                            .toString()
+                            .toLowerCase()
+                            .includes(value.toLowerCase()),
+                    onFilterDropdownVisibleChange: visible => {
+                        if (visible) {
+                            setTimeout(() => {
+                                this.searchInput.focus();
+                            }, 0);
+                        }
+                    },
+                },
+                {
+                    title: '用户名',
+                    dataIndex: 'username',
+                    key: 'username',
+                    scopedSlots: {
+                        filterDropdown: 'filterDropdown',
+                        filterIcon: 'filterIcon',
+                        customRender: 'username',
+                    },
+                    onFilter: (value, record) =>
+                        record.username
+                            .toString()
+                            .toLowerCase()
+                            .includes(value.toLowerCase()),
+                    onFilterDropdownVisibleChange: visible => {
+                        if (visible) {
+                            setTimeout(() => {
+                                this.searchInput.focus();
+                            });
+                        }
+                    },
+                },
+                {
+                    title: '真实姓名',
                     dataIndex: 'name',
                     key: 'name',
                     scopedSlots: {
@@ -407,21 +438,21 @@ export default {
                         if (visible) {
                             setTimeout(() => {
                                 this.searchInput.focus();
-                            }, 0);
+                            });
                         }
                     },
                 },
                 {
-                    title: 'Age',
-                    dataIndex: 'age',
-                    key: 'age',
+                    title: '手机号',
+                    dataIndex: 'phone',
+                    key: 'phone',
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'age',
+                        customRender: 'phone',
                     },
                     onFilter: (value, record) =>
-                        record.age
+                        record.phone
                             .toString()
                             .toLowerCase()
                             .includes(value.toLowerCase()),
@@ -434,16 +465,16 @@ export default {
                     },
                 },
                 {
-                    title: 'Address',
-                    dataIndex: 'address',
-                    key: 'address',
+                    title: '邮箱',
+                    dataIndex: 'email',
+                    key: 'email',
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'address',
+                        customRender: 'email',
                     },
                     onFilter: (value, record) =>
-                        record.address
+                        record.email
                             .toString()
                             .toLowerCase()
                             .includes(value.toLowerCase()),
@@ -456,13 +487,37 @@ export default {
                     },
                 },
                 {
-                    title: 'operation',
-                    dataIndex: 'operation',
-                    scopedSlots: {customRender: 'operation'},
+                    title: '状态',
+                    dataIndex: 'status',
+                    key: 'status',
+                    scopedSlots: {
+                        filterDropdown: 'filterDropdown',
+                        filterIcon: 'filterIcon',
+                        customRender: 'status',
+                    },
+                    onFilter: (value, record) =>
+                        record.status
+                            .toString()
+                            .toLowerCase()
+                            .includes(value.toLowerCase()),
+                    onFilterDropdownVisibleChange: visible => {
+                        if (visible) {
+                            setTimeout(() => {
+                                this.searchInput.focus();
+                            });
+                        }
+                    },
                 },
                 {
-                    title: 'operation_edit',
+                    title: '删除',
+                    dataIndex: 'operation_delete',
+                    key: 'operation_delete',
+                    scopedSlots: {customRender: 'operation_delete'},
+                },
+                {
+                    title: '修改',
                     dataIndex: 'operation_edit',
+                    key: 'operation_edit',
                     scopedSlots: {customRender: 'operation_edit'},
                 },
             ],
@@ -475,7 +530,103 @@ export default {
             return this.selectedRowKeys.length > 0;
         },
     },
+    mounted () {
+        //this.listUsers()
+        // this.listRoles()
+        this.listUsers()
+    },
     methods: {
+        // listUsers() {
+        //     let _this = this
+        //     this.$axios.get('/admin/user').then(resp => {
+        //         if (resp && resp.data.code === 200) {
+        //             _this.user = resp.data.result
+        //         }
+        //     })
+        // },
+        // listRoles() {
+        //     let _this = this
+        //     this.$axios.get('/admin/role').then(resp => {
+        //         if (resp && resp.data.code === 200) {
+        //             _this.roles = resp.data.result
+        //         }
+        //     })
+        // },
+        listUsers() {
+            let _this = this
+            this.$axios.get('/admin/user').then(resp => {
+                if (resp && resp.data.code === 200) {
+                    _this.data = resp.data.data
+                }
+            })
+        },
+        commitStatusChange(value, user) {
+            if (user.username !== 'admin') {
+                this.$axios.put('/admin/user/status', {
+                    enabled: value,
+                    username: user.username
+                }).then(resp => {
+                    if (resp && resp.data.code === 200) {
+                        if (value) {
+                            this.$message('用户 [' + user.username + '] 已启用')
+                        } else {
+                            this.$message('用户 [' + user.username + '] 已禁用')
+                        }
+                    }
+                })
+            } else {
+                user.enabled = true
+                this.$alert('不能禁用管理员账户')
+            }
+        },
+        onSubmit(user) {
+            let _this = this
+            // 根据视图绑定的角色 id 向后端传送角色信息
+            let roles = []
+            for (let i = 0; i < _this.selectedRolesIds.length; i++) {
+                for (let j = 0; j < _this.roles.length; j++) {
+                    if (_this.selectedRolesIds[i] === _this.roles[j].id) {
+                        roles.push(_this.roles[j])
+                    }
+                }
+            }
+            this.$axios.put('/admin/user', {
+                username: user.username,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                roles: roles
+            }).then(resp => {
+                if (resp && resp.data.code === 200) {
+                    this.$alert('用户信息修改成功')
+                    this.dialogFormVisible = false
+                    // 修改角色后重新请求用户信息，实现视图更新
+                    this.listUsers()
+                } else {
+                    this.$alert(resp.data.message)
+                }
+            })
+        },
+        editUser(user) {
+            this.dialogFormVisible = true
+            this.selectedUser = user
+            let roleIds = []
+            for (let i = 0; i < user.roles.length; i++) {
+                roleIds.push(user.roles[i].id)
+            }
+            this.selectedRolesIds = roleIds
+        },
+        resetPassword(username) {
+            this.$axios.put('/admin/user/password', {
+                username: username
+            }).then(resp => {
+                if (resp && resp.data.code === 200) {
+                    this.$alert('密码已重置为 123')
+                }
+            })
+        },
+
+        //demo
         start() {
             this.loading = true;
             // ajax request after empty completing
@@ -506,15 +657,14 @@ export default {
             const {count, data} = this;
             const newData = {
                 key: count,
-                name: `Edward King ${count}`,
-                age: 32,
-                address: `London, Park Lane no. ${count}`,
+                id: `Edward King ${count}`,
+                username: 32,
+                name: `London, Park Lane no. ${count}`,
             };
             this.data = [...data, newData];
             this.count = count + 1;
         },
         handleChange(value, key, column) {
-            console.log("value " + value + "key " + key + "column " + column)
             const newData = [...this.data];
             const target = newData.filter(item => key === item.key)[0];
             if (target) {
@@ -523,7 +673,6 @@ export default {
             }
         },
         edit(key) {
-            console.log("edit key " + key)
             const newData = [...this.data];
             const target = newData.filter(item => key === item.key)[0];
             this.editingKey = key;
@@ -533,7 +682,7 @@ export default {
             }
         },
         save(key) {
-            console.log("save key " + key)
+
             const newData = [...this.data];
             const newCacheData = [...this.cacheData];
             const target = newData.filter(item => key === item.key)[0];
@@ -547,7 +696,7 @@ export default {
             this.editingKey = '';
         },
         cancel(key) {
-            console.log("cancel key " + key)
+
             const newData = [...this.data];
             const target = newData.filter(item => key === item.key)[0];
             this.editingKey = '';
