@@ -240,7 +240,7 @@
             <a-button class="editable-add-btn" @click="handleAdd">
                 Add
             </a-button>
-            <span style = "margin-right: 28px"></span>
+            <span style="margin-right: 28px"></span>
             <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="start">
                 Reload
             </a-button>
@@ -254,6 +254,7 @@
             :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             :columns="columns"
             :data-source="data"
+            bordered
         >
             <div
                 slot="filterDropdown"
@@ -311,34 +312,64 @@
                     <a href="javascript:;">Delete</a>
                 </a-popconfirm>
             </template>
+            <template
+                v-for="col in ['name', 'age', 'address']"
+                :slot="col"
+                slot-scope="text, record, index"
+            >
+                <div :key="col">
+                    <a-input
+                        v-if="record.editable"
+                        style="margin: -5px 0"
+                        :value="text"
+                        @change="e => handleChange(e.target.value, record.key, col)"
+                    />
+                    <template v-else>
+                        {{ text }}
+                    </template>
+                </div>
+            </template>
+            <template slot="operation_edit" slot-scope="text, record, index">
+                <div class="editable-row-operations">
+                    <span v-if="record.editable">
+                        <a @click="() => save(record.key)">Save</a>
+                        <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
+                            <a>Cancel</a>
+                        </a-popconfirm>
+                    </span>
+                    <span v-else>
+                        <a :disabled="editingKey !== ''" @click="() => edit(record.key)">Edit</a>
+                     </span>
+                </div>
+            </template>
         </a-table>
     </div>
 </template>
 <script>
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-    },
-    {
-        title: 'operation',
-        dataIndex: 'operation',
-        scopedSlots: { customRender: 'operation' },
-    },
-];
+// const columns = [
+//     {
+//         title: 'Name',
+//         dataIndex: 'name',
+//     },
+//     {
+//         title: 'Age',
+//         dataIndex: 'age',
+//     },
+//     {
+//         title: 'Address',
+//         dataIndex: 'address',
+//     },
+//     {
+//         title: 'operation',
+//         dataIndex: 'operation',
+//         scopedSlots: {customRender: 'operation'},
+//     },
+// ];
 
 const data = [];
 for (let i = 0; i < 46; i++) {
     data.push({
-        key: i,
+        key: i.toString(),
         name: `Edward King ${i}`,
         age: 32,
         address: `London, Park Lane no. ${i}`,
@@ -349,12 +380,14 @@ export default {
     name: 'UserProfile',
     // components: {BulkRegistration},
     data() {
+        this.cacheData = data.map(item => ({ ...item }));
         return {
             data,
             searchText: '',
             searchInput: null,
             searchedColumn: '',
             count: 20,
+            editingKey: '',
             columns: [
                 {
                     title: 'Name',
@@ -363,7 +396,7 @@ export default {
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'customRender',
+                        customRender: 'name',
                     },
                     onFilter: (value, record) =>
                         record.name
@@ -385,7 +418,7 @@ export default {
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'customRender',
+                        customRender: 'age',
                     },
                     onFilter: (value, record) =>
                         record.age
@@ -407,7 +440,7 @@ export default {
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'customRender',
+                        customRender: 'address',
                     },
                     onFilter: (value, record) =>
                         record.address
@@ -425,10 +458,14 @@ export default {
                 {
                     title: 'operation',
                     dataIndex: 'operation',
-                    scopedSlots: { customRender: 'operation' },
+                    scopedSlots: {customRender: 'operation'},
+                },
+                {
+                    title: 'operation_edit',
+                    dataIndex: 'operation_edit',
+                    scopedSlots: { customRender: 'operation_edit' },
                 },
             ],
-
             selectedRowKeys: [], // Check here to configure the default column
             loading: false,
         };
@@ -466,7 +503,7 @@ export default {
             this.searchText = '';
         },
         handleAdd() {
-            const { count, data } = this;
+            const {count, data} = this;
             const newData = {
                 key: count,
                 name: `Edward King ${count}`,
@@ -476,6 +513,50 @@ export default {
             this.data = [...data, newData];
             this.count = count + 1;
         },
+        handleChange(value, key, column) {
+            console.log("value " + value + "key " + key + "column " + column)
+            const newData = [...this.data];
+            const target = newData.filter(item => key === item.key)[0];
+            if (target) {
+                target[column] = value;
+                this.data = newData;
+            }
+        },
+        edit(key) {
+            console.log("edit key " + key)
+            const newData = [...this.data];
+            const target = newData.filter(item => key === item.key)[0];
+            this.editingKey = key;
+            if (target) {
+                target.editable = true;
+                this.data = newData;
+            }
+        },
+        save(key) {
+            console.log("save key " + key)
+            const newData = [...this.data];
+            const newCacheData = [...this.cacheData];
+            const target = newData.filter(item => key === item.key)[0];
+            const targetCache = newCacheData.filter(item => key === item.key)[0];
+            if (target && targetCache) {
+                delete target.editable;
+                this.data = newData;
+                Object.assign(targetCache, target);
+                this.cacheData = newCacheData;
+            }
+            this.editingKey = '';
+        },
+        cancel(key) {
+            console.log("cancel key " + key)
+            const newData = [...this.data];
+            const target = newData.filter(item => key === item.key)[0];
+            this.editingKey = '';
+            if (target) {
+                Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
+                delete target.editable;
+                this.data = newData;
+            }
+        },
     },
 };
 </script>
@@ -484,6 +565,9 @@ export default {
 .highlight {
     background-color: rgb(255, 192, 105);
     padding: 0;
+}
+.editable-row-operations a {
+    margin-right: 8px;
 }
 </style>
 

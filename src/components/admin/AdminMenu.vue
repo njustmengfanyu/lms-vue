@@ -3,6 +3,7 @@
         :default-active="currentPath"
         class="el-menu-admin"
         router
+        withCredentials
         mode="vertical"
         background-color="rgb(204, 204, 255)"
         text-color="#fff"
