@@ -380,7 +380,7 @@ export default {
     name: 'UserProfile',
     // components: {BulkRegistration},
     data() {
-        this.cacheData = data.map(item => ({ ...item }));
+        this.cacheData = data.map(item => ({...item}));
         return {
             data,
             searchText: '',
@@ -463,7 +463,7 @@ export default {
                 {
                     title: 'operation_edit',
                     dataIndex: 'operation_edit',
-                    scopedSlots: { customRender: 'operation_edit' },
+                    scopedSlots: {customRender: 'operation_edit'},
                 },
             ],
             selectedRowKeys: [], // Check here to configure the default column
@@ -566,6 +566,7 @@ export default {
     background-color: rgb(255, 192, 105);
     padding: 0;
 }
+
 .editable-row-operations a {
     margin-right: 8px;
 }

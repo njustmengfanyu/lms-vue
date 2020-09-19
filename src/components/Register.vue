@@ -26,6 +26,7 @@
                 <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register('loginForm')">注册
                 </el-button>
             </el-form-item>
+            <p>注册成功后页面会自动跳转哦！</p>
         </el-form>
     </div>
 </template>
