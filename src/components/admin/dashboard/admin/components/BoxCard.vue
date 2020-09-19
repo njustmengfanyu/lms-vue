@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card-component" style="margin-left:8px;">
     <div slot="header" class="box-card-header">
-      <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">
+      <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png" alt="图片挂了">
     </div>
     <div style="position:relative;">
       <!--<pan-thumb :image="avatar" class="panThumb" />-->
@@ -64,7 +64,7 @@ export default {
 <style lang="scss" >
 .box-card-component{
   .el-card__header {
-    padding: 0px!important;
+    padding: 0 !important;
   }
 }
 </style>
@@ -85,8 +85,8 @@ export default {
   }
   .mallki-text {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     font-size: 20px;
     font-weight: bold;
   }
@@ -96,7 +96,7 @@ export default {
     width: 70px!important;
     position: absolute!important;
     top: -45px;
-    left: 0px;
+    left: 0;
     border: 5px solid #ffffff;
     background-color: #fff;
     margin: auto;

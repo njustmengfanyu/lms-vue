@@ -5,9 +5,13 @@ import router from "./router";
 import store from "./store";
 import VueRouter from "vue-router";
 import ElementUi from 'element-ui';
+import antui, {Button} from 'ant-design-vue';
 import 'element-ui/lib/theme-chalk/index.css'
+import 'ant-design-vue/dist/antd.css';
 
 Vue.use(VueRouter);
+Vue.use(antui);
+Vue.use(Button);
 
 let axios = require('axios');
 axios.defaults.baseURL = 'http://localhost:8998/api'
@@ -71,7 +75,7 @@ router.beforeEach((to, from, next) => {
         // 已登录状态下访问 login 页面直接跳转到后台首页
         if (store.state.username && to.path.startsWith('/login')) {
             next({
-                path: 'admin'
+                path: 'admin/dashboard'
             })
         }
         if (to.meta.requireAuth) {
@@ -81,7 +85,7 @@ router.beforeEach((to, from, next) => {
                 })
             } else {
                 next({
-                    path: 'login',
+                    path: '/login',
                     query: {redirect: to.fullPath}
                 })
             }

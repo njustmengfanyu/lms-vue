@@ -8,7 +8,6 @@
                 <AdminMenu @indexSelect="listByCategory" ref="adminmenu"></AdminMenu>
             </el-aside>
             <el-main>
-<!--                <AdminMenu class="adminmenu" ref="adminmenubar"></AdminMenu>-->
                 <router-view/>
             </el-main>
         </el-container>

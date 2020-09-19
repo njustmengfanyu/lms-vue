@@ -1,8 +1,5 @@
 <template>
   <el-card class="admin-header">
-<!--    <a href="/admin">-->
-<!--      <img src="../../assets/img/icon/icon2.png" alt="" width="55px" style="float: left;margin-top: -5px;">-->
-<!--    </a>-->
     <span style="font-size: 28px;font-weight: bold;position:absolute;left: 10px">图书管理系统后台</span>
     <i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px;float: right"></i>
   </el-card>
