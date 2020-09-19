@@ -316,7 +316,7 @@
                 </a-popconfirm>
             </template>
             <template
-                v-for="col in ['id', 'username', 'name', 'phone', 'email', 'status']"
+                v-for="col in ['id', 'username', 'name', 'phone', 'email', 'enabled']"
                 :slot="col"
                 slot-scope="text, record, index"
             >
@@ -488,15 +488,15 @@ export default {
                 },
                 {
                     title: '状态',
-                    dataIndex: 'status',
-                    key: 'status',
+                    dataIndex: 'enabled',
+                    key: 'enabled',
                     scopedSlots: {
                         filterDropdown: 'filterDropdown',
                         filterIcon: 'filterIcon',
-                        customRender: 'status',
+                        customRender: 'enabled',
                     },
                     onFilter: (value, record) =>
-                        record.status
+                        record.enabled
                             .toString()
                             .toLowerCase()
                             .includes(value.toLowerCase()),
