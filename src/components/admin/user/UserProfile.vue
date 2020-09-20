@@ -346,11 +346,42 @@
                         </a-popconfirm>
                     </span>
                     <span v-else>
-                        <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>
-                     </span>
+<!--                        <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>-->
+                         <a :disabled="editingKey !== ''" @click="dialogFormVisible = true">编辑</a>
+                    </span>
                 </div>
             </template>
         </a-table>
+
+        <el-dialog
+            title="修改用户信息"
+            :visible.sync="dialogFormVisible"
+            @close="clear">
+            <el-form v-model="form" style="text-align: left" ref="dataForm">
+<!--                <el-form-item label="id" :label-width="formLabelWidth" prop="id">-->
+<!--                    <el-input v-model="form.id" autocomplete="off" ></el-input>-->
+<!--                </el-form-item>-->
+                <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+                    <el-input v-model="form.username" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="真实姓名" :label-width="formLabelWidth" prop="name">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="电话号码" :label-width="formLabelWidth" prop="phone">
+                    <el-input v-model="form.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
+                    <el-input v-model="form.email" autocomplete="off"></el-input>
+                </el-form-item>
+<!--                <el-form-item label="状态" :label-width="formLabelWidth" prop="enabled">-->
+<!--                    <el-input v-model="form.enabled" autocomplete="off"></el-input>-->
+<!--                </el-form-item>-->
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="onSubmit">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -367,20 +398,36 @@ const data = [];
 //     });
 // }
 const roles =[];
+let obj = {};
 //import BulkRegistration from './BulkRegistration'
+//2020.9.20 15.05 xiugaiqian
 
 export default {
+
     name: 'UserProfile',
     //components: {BulkRegistration},
     data() {
         this.cacheData = data.map(item => ({...item}));
         return {
+            dialogFormVisible: false,
+            form: {
+
+                username: '',
+                name: '',
+                phone: '',
+                email: '',
+                //enabled: '',
+            },
+            formLabelWidth: '120px',
+
+
+
             data,
             searchText: '',
             searchInput: null,
             searchedColumn: '',
             editingKey: '',
-            roles,
+            //roles,
             columns: [
                 {
                     title: 'id',
@@ -539,6 +586,44 @@ export default {
         this.listUsers()
     },
     methods: {
+        clear() {
+            this.form = {
+                id: '',
+                username: '',
+                name: '',
+                phone: '',
+                email: '',
+                enabled: ''
+            }
+        },
+        onSubmit() {
+            this.$axios
+                .put('/admin/user', {
+                    //id: this.form.id,
+                    username: this.form.username,
+                    name: this.form.name,
+                    phone: this.form.phone,
+                    email: this.form.email,
+                    //enabled: this.form.enabled,
+                }).then(resp => {
+                if (resp && resp.status === 200) {
+                    console.log(resp.status)
+                    this.dialogFormVisible = false
+                    this.$emit('onSubmit')
+                    this.$message.success(resp.data.message)
+                    this.listUsers()
+                } else {
+                    console.log(resp.status)
+                    this.$message.error('提交错误')
+                }
+            })
+                .catch(err => {
+                    this.$message.error('服务器错误')
+                })
+        },
+
+
+
         listUsers() {
             let _this = this
             this.$axios.get('/admin/user').then(resp => {
@@ -696,19 +781,13 @@ export default {
                 Object.assign(targetCache, target);
                 this.cacheData = newCacheData;
             }
-            console.log("tar值 " + targetCache + "cache " + this.cacheData + "target " + target)
+            console.log("tar值 " + targetCache + " cache " + this.cacheData + " target " + target)
             this.editingKey = '';
-            console.log(this.data + " " + this.data.name + " " + this.data.phone + " " + this.data.email)
+            console.log(...this.data)
             this.$axios.put('/admin/user', {
-                username: _this.data.username,
-                name: _this.data.name,
-                phone: _this.data.phone,
-                email: _this.data.email
-                // username: '_this.data.username',
-                // name: '_this.data.name',
-                // phone: '_this.data.phone',
-                // email: 'email@163.com'
-            }).then(resp => {
+                ...this.data
+            })
+            .then(resp => {
                 if (resp && resp.data.code === 200) {
                     this.$alert('用户信息修改成功')
                     // 修改角色后重新请求用户信息，实现视图更新
