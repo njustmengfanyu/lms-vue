@@ -347,7 +347,7 @@
                     </span>
                     <span v-else>
 <!--                        <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>-->
-                         <a :disabled="editingKey !== ''" @click="dialogFormVisible = true">编辑</a>
+                         <a :disabled="editingKey !== ''" @click="editNode(record)">编辑</a>
                     </span>
                 </div>
             </template>
@@ -358,9 +358,9 @@
             :visible.sync="dialogFormVisible"
             @close="clear">
             <el-form v-model="form" style="text-align: left" ref="dataForm">
-<!--                <el-form-item label="id" :label-width="formLabelWidth" prop="id">-->
-<!--                    <el-input v-model="form.id" autocomplete="off" ></el-input>-->
-<!--                </el-form-item>-->
+                <el-form-item  label="id" :label-width="formLabelWidth" prop="id">
+                    <el-input  v-model="form.id" autocomplete="off" :placeholder="dialogForm_id" :disabled="true"></el-input>
+                </el-form-item>
                 <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
                     <el-input v-model="form.username" autocomplete="off"></el-input>
                 </el-form-item>
@@ -387,16 +387,6 @@
 <script>
 
 const data = [];
-// for (let i = 0; i < 100; i++) {
-//     data.push({
-//         id: i.toString(),
-//         username: "a",
-//         name: `Edrward ${i}`,
-//         phone: 11,
-//         email: 32,
-//         enabled: 1,
-//     });
-// }
 const roles =[];
 let obj = {};
 //import BulkRegistration from './BulkRegistration'
@@ -410,8 +400,9 @@ export default {
         this.cacheData = data.map(item => ({...item}));
         return {
             dialogFormVisible: false,
+            dialogForm_id:0,
             form: {
-
+                id: '',
                 username: '',
                 name: '',
                 phone: '',
@@ -419,8 +410,6 @@ export default {
                 //enabled: '',
             },
             formLabelWidth: '120px',
-
-
 
             data,
             searchText: '',
@@ -599,7 +588,7 @@ export default {
         onSubmit() {
             this.$axios
                 .put('/admin/user', {
-                    //id: this.form.id,
+                    id: this.dialogForm_id,
                     username: this.form.username,
                     name: this.form.name,
                     phone: this.form.phone,
@@ -807,6 +796,11 @@ export default {
                 this.data = newData;
             }
         },
+        editNode:function (item){
+            console.log(item)
+            this.dialogFormVisible = true
+            this.dialogForm_id=item.id
+        }
     },
 };
 </script>
