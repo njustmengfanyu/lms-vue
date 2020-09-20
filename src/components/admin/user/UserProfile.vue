@@ -539,24 +539,6 @@ export default {
         this.listUsers()
     },
     methods: {
-        // listUsers() {
-        //     let _this = this
-        //     this.$axios.get('/admin/user').then(resp => {
-        //         if (resp && resp.data.code === 200) {
-        //             _this.user = resp.data.result
-        //         }
-        //     })
-        // },
-        // listRoles() {
-        //     let _this = this
-        //     this.$axios.get('/admin/role').then(resp => {
-        //         if (resp && resp.data.code === 200) {
-        //             _this.roles = resp.data.result
-        //         }
-        //     })
-        // },
-
-
         listUsers() {
             let _this = this
             this.$axios.get('/admin/user').then(resp => {
@@ -655,8 +637,14 @@ export default {
             this.selectedRowKeys = selectedRowKeys;
         },
         onDelete(id) {
+            let _this = this
             const data = [...this.data];
             this.data = data.filter(item => item.id !== id);
+            this.$axios.post('admin/user/delete', {id: id}).then(resp=>{
+                if (resp && resp.status === 200) {
+                    this.listUsers()
+                }
+            })
         },
         handleSearch(selectedKeys, confirm, dataIndex) {
             confirm();
@@ -677,12 +665,11 @@ export default {
                 name: `London, Park Lane no. ${count}`,
             };
             this.data = [...data, newData];
-            this.count = count + 1;
         },
         handleChange(value, id, column) {
             const newData = [...this.data];
             const target = newData.filter(item => id === item.id)[0];
-            console.log(column)
+            console.log('column ' + column + ' value ' + value)
             if (target) {
                 target[column] = value;
                 this.data = newData;
@@ -709,6 +696,7 @@ export default {
                 Object.assign(targetCache, target);
                 this.cacheData = newCacheData;
             }
+            console.log("tar值 " + targetCache + "cache " + this.cacheData + "target " + target)
             this.editingKey = '';
             console.log(this.data + " " + this.data.name + " " + this.data.phone + " " + this.data.email)
             this.$axios.put('/admin/user', {
@@ -731,7 +719,6 @@ export default {
             })
         },
         cancel(id) {
-
             const newData = [...this.data];
             const target = newData.filter(item => id === item.id)[0];
             this.editingKey = '';
