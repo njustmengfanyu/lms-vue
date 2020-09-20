@@ -1,251 +1,178 @@
 <!--<template>-->
-<!--    <div>-->
-<!--        <el-dialog-->
-<!--            title="修改用户信息"-->
-<!--            :visible.sync="dialogFormVisible">-->
-<!--            <el-form v-model="selectedUser" style="text-align: left" ref="dataForm">-->
-<!--                <el-form-item label="用户名" label-width="120px" prop="username">-->
-<!--                    <label>{{ selectedUser.username }}</label>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="真实姓名" label-width="120px" prop="name">-->
-<!--                    <el-input v-model="selectedUser.name" autocomplete="off"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="手机号" label-width="120px" prop="phone">-->
-<!--                    <el-input v-model="selectedUser.phone" autocomplete="off"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="邮箱" label-width="120px" prop="email">-->
-<!--                    <el-input v-model="selectedUser.email" autocomplete="off"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="密码" label-width="120px" prop="password">-->
-<!--                    <el-button type="warning" @click="resetPassword(selectedUser.username)">重置密码</el-button>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="角色分配" label-width="120px" prop="roles">-->
-<!--                    <el-checkbox-group v-model="selectedRolesIds">-->
-<!--                        <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{ role.nameZh }}</el-checkbox>-->
-<!--                    </el-checkbox-group>-->
-<!--                </el-form-item>-->
+<!--  <div>-->
+<!--    <el-row style="margin: 18px 0 0 18px ">-->
+<!--      <el-breadcrumb separator-class="el-icon-arrow-right">-->
+<!--        <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>-->
+<!--        <el-breadcrumb-item>内容管理</el-breadcrumb-item>-->
+<!--        <el-breadcrumb-item>图书管理</el-breadcrumb-item>-->
+<!--      </el-breadcrumb>-->
+<!--    </el-row>-->
+<!--    <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>-->
+<!--    <el-card style="margin: 18px 2%;width: 95%">-->
+<!--      <el-table-->
+<!--        :data="books"-->
+<!--        stripe-->
+<!--        style="width: 100%"-->
+<!--        :max-height="tableHeight">-->
+<!--        <el-table-column-->
+<!--          type="selection"-->
+<!--          width="55">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column type="expand">-->
+<!--          <template slot-scope="props">-->
+<!--            <el-form label-position="left" inline>-->
+<!--              <el-form-item>-->
+<!--                <span>{{ props.row.abs }}</span>-->
+<!--              </el-form-item>-->
 <!--            </el-form>-->
-<!--            <div slot="footer" class="dialog-footer">-->
-<!--                <el-button @click="dialogFormVisible = false">取 消</el-button>-->
-<!--                <el-button type="primary" @click="onSubmit(selectedUser)">确 定</el-button>-->
-<!--            </div>-->
-<!--        </el-dialog>-->
-<!--        <el-row style="margin: 18px 0 0 18px ">-->
-<!--            <el-breadcrumb separator-class="el-icon-arrow-right">-->
-<!--                <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>-->
-<!--                <el-breadcrumb-item>用户管理</el-breadcrumb-item>-->
-<!--                <el-breadcrumb-item>用户信息</el-breadcrumb-item>-->
-<!--            </el-breadcrumb>-->
-<!--        </el-row>-->
-<!--        <bulk-registration @onSubmit="listUsers()"></bulk-registration>-->
-<!--        <el-card style="margin: 18px 2%;width: 95%">-->
-<!--            <el-table-->
-<!--                :data="users"-->
-<!--                stripe-->
-<!--                :default-sort="{prop: 'id', order: 'ascending'}"-->
-<!--                style="width: 100%"-->
-<!--                :max-height="tableHeight">-->
-<!--                <el-table-column-->
-<!--                    type="selection"-->
-<!--                    width="55">-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    prop="id"-->
-<!--                    label="id"-->
-<!--                    sortable-->
-<!--                    width="100">-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    prop="username"-->
-<!--                    label="用户名"-->
-<!--                    fit>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    prop="name"-->
-<!--                    label="真实姓名"-->
-<!--                    fit>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    prop="phone"-->
-<!--                    label="手机号"-->
-<!--                    fit>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    prop="email"-->
-<!--                    label="邮箱"-->
-<!--                    show-overflow-tooltip-->
-<!--                    fit>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    label="状态"-->
-<!--                    sortable-->
-<!--                    width="100">-->
-<!--                    <template slot-scope="scope">-->
-<!--                        <el-switch-->
-<!--                            v-model="scope.row.enabled"-->
-<!--                            active-color="#13ce66"-->
-<!--                            inactive-color="#ff4949"-->
-<!--                            @change="(value) => commitStatusChange(value, scope.row)">-->
-<!--                        </el-switch>-->
-<!--                    </template>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                    label="操作"-->
-<!--                    width="120">-->
-<!--                    <template slot-scope="scope">-->
-<!--                        <el-button-->
-<!--                            @click="editUser(scope.row)"-->
-<!--                            type="text"-->
-<!--                            size="small">-->
-<!--                            编辑-->
-<!--                        </el-button>-->
-<!--                        <el-button-->
-<!--                            type="text"-->
-<!--                            size="small">-->
-<!--                            移除-->
-<!--                        </el-button>-->
-<!--                    </template>-->
-<!--                </el-table-column>-->
-<!--            </el-table>-->
-<!--            <div style="margin: 20px 0 20px 0;float: left">-->
-<!--                <el-button>取消选择</el-button>-->
-<!--                <el-button>批量删除</el-button>-->
-<!--            </div>-->
-<!--        </el-card>-->
-<!--    </div>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="title"-->
+<!--          label="书名（展开查看摘要）"-->
+<!--          fit>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="category.name"-->
+<!--          label="分类"-->
+<!--          width="100">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="author"-->
+<!--          label="作者"-->
+<!--          fit>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="date"-->
+<!--          label="出版日期"-->
+<!--          width="120">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="press"-->
+<!--          label="出版社"-->
+<!--          fit>-->
+<!--        </el-table-column>-->
+<!--        &lt;!&ndash;<el-table-column&ndash;&gt;-->
+<!--          &lt;!&ndash;prop="abs"&ndash;&gt;-->
+<!--          &lt;!&ndash;label="摘要"&ndash;&gt;-->
+<!--          &lt;!&ndash;show-overflow-tooltip&ndash;&gt;-->
+<!--          &lt;!&ndash;fit>&ndash;&gt;-->
+<!--        &lt;!&ndash;</el-table-column>&ndash;&gt;-->
+<!--        <el-table-column-->
+<!--          fixed="right"-->
+<!--          label="操作"-->
+<!--          width="120">-->
+<!--          <template slot-scope="scope">-->
+<!--            <el-button-->
+<!--              @click.native.prevent="editBook(scope.row)"-->
+<!--              type="text"-->
+<!--              size="small">-->
+<!--              编辑-->
+<!--            </el-button>-->
+<!--            <el-button-->
+<!--              @click.native.prevent="deleteBook(scope.row.id)"-->
+<!--              type="text"-->
+<!--              size="small">-->
+<!--              移除-->
+<!--            </el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
+<!--      <div style="margin: 20px 0 20px 0;float: left">-->
+<!--        <el-button>取消选择</el-button>-->
+<!--        <el-button>批量删除</el-button>-->
+<!--      </div>-->
+<!--    </el-card>-->
+<!--  </div>-->
 <!--</template>-->
 
 <!--<script>-->
-<!--import BulkRegistration from './BulkRegistration'-->
-
-<!--export default {-->
-<!--    name: 'UserProfile',-->
-<!--    components: {BulkRegistration},-->
-<!--    data() {-->
-<!--        return {-->
-<!--            users: [],-->
-<!--            roles: [],-->
-<!--            dialogFormVisible: false,-->
-<!--            selectedUser: [],-->
-<!--            selectedRolesIds: []-->
-<!--        }-->
+<!--  import EditForm from '../../library/EditForm'-->
+<!--  export default {-->
+<!--    name: 'BookManagement',-->
+<!--    components: {EditForm},-->
+<!--    data () {-->
+<!--      return {-->
+<!--        books: []-->
+<!--      }-->
 <!--    },-->
-<!--    mounted() {-->
-<!--        this.listUsers()-->
-<!--        this.listRoles()-->
+<!--    mounted () {-->
+<!--      this.loadBooks()-->
 <!--    },-->
 <!--    computed: {-->
-<!--        tableHeight() {-->
-<!--            return window.innerHeight - 320-->
-<!--        }-->
+<!--      tableHeight () {-->
+<!--        return window.innerHeight - 320-->
+<!--      }-->
 <!--    },-->
 <!--    methods: {-->
-<!--        listUsers() {-->
-<!--            let _this = this;-->
-<!--            this.$axios.get('/admin/user').then(resp => {-->
-<!--                if (resp && resp.data.code === 200) {-->
-<!--                    console.log("listUsers code" + resp.data.code + " " + resp.data.result + resp.data)-->
-<!--                    _this.users = Array.from(resp.data)-->
-<!--                    console.log(_this.users)-->
-<!--                }-->
+<!--      deleteBook (id) {-->
+<!--        this.$confirm('此操作将永久删除该书籍, 是否继续?', '提示', {-->
+<!--          confirmButtonText: '确定',-->
+<!--          cancelButtonText: '取消',-->
+<!--          type: 'warning'-->
+<!--        }).then(() => {-->
+<!--            this.$axios-->
+<!--              .post('/admin/content/books/delete', {id: id}).then(resp => {-->
+<!--              if (resp && resp.data.code === 200) {-->
+<!--                this.loadBooks()-->
+<!--              }-->
 <!--            })-->
-<!--        },-->
-<!--        listRoles() {-->
-<!--            let _this = this;-->
-<!--            this.$axios.get('/admin/role').then(resp => {-->
-<!--                if (resp && resp.data.code === 200) {-->
-<!--                    console.log("listroles code" + resp.data.code)-->
-<!--                    _this.roles = Array.from(resp.data)-->
-<!--                    console.log(_this.roles)-->
-<!--                }-->
-<!--            })-->
-<!--        },-->
-<!--        commitStatusChange(value, user) {-->
-<!--            if (user.username !== 'admin') {-->
-<!--                this.$axios.put('/admin/user/status', {-->
-<!--                    enabled: value,-->
-<!--                    username: user.username-->
-<!--                }).then(resp => {-->
-<!--                    if (resp && resp.data.code === 200) {-->
-<!--                        console.log("commitStatusChange code" + resp.data.code)-->
-<!--                        if (value) {-->
-<!--                            this.$message('用户 [' + user.username + '] 已启用')-->
-<!--                        } else {-->
-<!--                            this.$message('用户 [' + user.username + '] 已禁用')-->
-<!--                        }-->
-<!--                    }-->
-<!--                })-->
-<!--            } else {-->
-<!--                user.enabled = true-->
-<!--                this.$alert('不能禁用管理员账户')-->
-<!--            }-->
-<!--        },-->
-<!--        onSubmit(user) {-->
-<!--            let _this = this-->
-<!--            // 根据视图绑定的角色 id 向后端传送角色信息-->
-<!--            let roles = []-->
-<!--            for (let i = 0; i < _this.selectedRolesIds.length; i++) {-->
-<!--                for (let j = 0; j < _this.roles.length; j++) {-->
-<!--                    if (_this.selectedRolesIds[i] === _this.roles[j].id) {-->
-<!--                        roles.push(_this.roles[j])-->
-<!--                    }-->
-<!--                }-->
-<!--            }-->
-<!--            this.$axios.put('/admin/user', {-->
-<!--                username: user.username,-->
-<!--                name: user.name,-->
-<!--                phone: user.phone,-->
-<!--                email: user.email,-->
-<!--                roles: roles-->
-<!--            }).then(resp => {-->
-<!--                if (resp && resp.data.code === 200) {-->
-<!--                    this.$alert('用户信息修改成功')-->
-<!--                    this.dialogFormVisible = false-->
-<!--                    // 修改角色后重新请求用户信息，实现视图更新-->
-<!--                    this.listUsers()-->
-<!--                } else {-->
-<!--                    this.$alert(resp.data.message)-->
-<!--                }-->
-<!--            })-->
-<!--        },-->
-<!--        editUser(user) {-->
-<!--            this.dialogFormVisible = true-->
-<!--            this.selectedUser = user-->
-<!--            let roleIds = []-->
-<!--            for (let i = 0; i < user.roles.length; i++) {-->
-<!--                roleIds.push(user.roles[i].id)-->
-<!--            }-->
-<!--            this.selectedRolesIds = roleIds-->
-<!--        },-->
-<!--        resetPassword(username) {-->
-<!--            this.$axios.put('/admin/user/password', {-->
-<!--                username: username-->
-<!--            }).then(resp => {-->
-<!--                if (resp && resp.data.code === 200) {-->
-<!--                    this.$alert('密码已重置为 123')-->
-<!--                }-->
-<!--            })-->
+<!--          }-->
+<!--        ).catch(() => {-->
+<!--          this.$message({-->
+<!--            type: 'info',-->
+<!--            message: '已取消删除'-->
+<!--          })-->
+<!--        })-->
+<!--      },-->
+<!--      editBook (item) {-->
+<!--        this.$refs.edit.dialogFormVisible = true-->
+<!--        this.$refs.edit.form = {-->
+<!--          id: item.id,-->
+<!--          cover: item.cover,-->
+<!--          title: item.title,-->
+<!--          author: item.author,-->
+<!--          date: item.date,-->
+<!--          press: item.press,-->
+<!--          abs: item.abs,-->
+<!--          category: {-->
+<!--            id: item.category.id.toString(),-->
+<!--            name: item.category.name-->
+<!--          }-->
 <!--        }-->
+<!--        // this.$refs.edit.category = {-->
+<!--        //   id: item.category.id.toString()-->
+<!--        // }-->
+<!--      },-->
+<!--      loadBooks () {-->
+<!--        var _this = this-->
+<!--        this.$axios.get('/books').then(resp => {-->
+<!--          if (resp && resp.data.code === 200) {-->
+<!--            _this.books = resp.data.result-->
+<!--          }-->
+<!--        })-->
+<!--      }-->
 <!--    }-->
-<!--}-->
+<!--  }-->
 <!--</script>-->
 
 <!--<style scoped>-->
-
 <!--</style>-->
-
 <template>
     <div>
         <div style="margin-bottom: 16px">
+            <!--    <div style="font-size: 24px; height: 30px; margin-bottom: 15px">-->
+            <!--        <a-space>用户管理 > 用户信息</a-space>-->
+            <!--    </div>-->
             <el-row style="margin: 18px 0 0 18px ">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-                    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-                    <el-breadcrumb-item>用户信息</el-breadcrumb-item>
+                    <el-breadcrumb-item>内容管理</el-breadcrumb-item>
+                    <el-breadcrumb-item>图书管理</el-breadcrumb-item>
                 </el-breadcrumb>
             </el-row>
             <a-button class="editable-add-btn" @click="handleAdd">
-                添加用户信息
+                添加图书信息
             </a-button>
             <span style="margin-right: 24px"></span>
             <a-button type="primary" :disabled="!hasSelected" :loading="loading" @click="start">
@@ -315,7 +242,7 @@
                 <a-popconfirm
                     v-if="data.length"
                     title="确定要删除吗?"
-                    @confirm="() => onDelete(record.id)"
+                    @confirm="() => onDelete(record.key)"
                 >
                     <a href="javascript:;">删除</a>
                 </a-popconfirm>
@@ -330,7 +257,7 @@
                         v-if="record.editable"
                         style="margin: -5px 0"
                         :value="text"
-                        @change="e => handleChange(e.target.value, record.id, col)"
+                        @change="e => handleChange(e.target.value, record.key, col)"
                     />
                     <template v-else>
                         {{ text }}
@@ -340,13 +267,13 @@
             <template slot="operation_edit" slot-scope="text, record, index">
                 <div class="editable-row-operations">
                     <span v-if="record.editable">
-                        <a @click="() => save(record.id)">Save</a>
-                        <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.id)">
+                        <a @click="() => save(record.key)">Save</a>
+                        <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
                             <a>Cancel</a>
                         </a-popconfirm>
                     </span>
                     <span v-else>
-                        <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>
+                        <a :disabled="editingKey !== ''" @click="() => edit(record.key)">编辑</a>
                      </span>
                 </div>
             </template>
@@ -356,22 +283,20 @@
 <script>
 
 const data = [];
-// for (let i = 0; i < 100; i++) {
+// for (let i = 0; i < 6; i++) {
 //     data.push({
-//         id: i.toString(),
-//         username: "a",
-//         name: `Edrward ${i}`,
-//         phone: 11,
-//         email: 32,
-//         enabled: 1,
+//         key: i.toString(),
+//         id: `Edward King ${i}`,
+//         username: 32,
+//         name: `abc. ${i}`,
+//         phone: 111,
+//         email: '111@qq.com',
+//         status: 1
 //     });
 // }
-const roles =[];
-//import BulkRegistration from './BulkRegistration'
 
 export default {
     name: 'UserProfile',
-    //components: {BulkRegistration},
     data() {
         this.cacheData = data.map(item => ({...item}));
         return {
@@ -380,10 +305,9 @@ export default {
             searchInput: null,
             searchedColumn: '',
             editingKey: '',
-            roles,
             columns: [
                 {
-                    title: 'id',
+                    title: '书名',
                     dataIndex: 'id',
                     key: 'id',
                     scopedSlots: {
@@ -405,7 +329,7 @@ export default {
                     },
                 },
                 {
-                    title: '用户名',
+                    title: '分类',
                     dataIndex: 'username',
                     key: 'username',
                     scopedSlots: {
@@ -427,7 +351,7 @@ export default {
                     },
                 },
                 {
-                    title: '真实姓名',
+                    title: '作者',
                     dataIndex: 'name',
                     key: 'name',
                     scopedSlots: {
@@ -449,7 +373,7 @@ export default {
                     },
                 },
                 {
-                    title: '手机号',
+                    title: '出版日期',
                     dataIndex: 'phone',
                     key: 'phone',
                     scopedSlots: {
@@ -471,7 +395,7 @@ export default {
                     },
                 },
                 {
-                    title: '邮箱',
+                    title: '出版社',
                     dataIndex: 'email',
                     key: 'email',
                     scopedSlots: {
@@ -481,28 +405,6 @@ export default {
                     },
                     onFilter: (value, record) =>
                         record.email
-                            .toString()
-                            .toLowerCase()
-                            .includes(value.toLowerCase()),
-                    onFilterDropdownVisibleChange: visible => {
-                        if (visible) {
-                            setTimeout(() => {
-                                this.searchInput.focus();
-                            });
-                        }
-                    },
-                },
-                {
-                    title: '状态',
-                    dataIndex: 'enabled',
-                    key: 'enabled',
-                    scopedSlots: {
-                        filterDropdown: 'filterDropdown',
-                        filterIcon: 'filterIcon',
-                        customRender: 'enabled',
-                    },
-                    onFilter: (value, record) =>
-                        record.enabled
                             .toString()
                             .toLowerCase()
                             .includes(value.toLowerCase()),
@@ -534,7 +436,8 @@ export default {
             return this.selectedRowKeys.length > 0;
         },
     },
-    mounted () {
+    mounted() {
+        //this.listUsers()
         this.listRoles()
         this.listUsers()
     },
@@ -555,8 +458,6 @@ export default {
         //         }
         //     })
         // },
-
-
         listUsers() {
             let _this = this
             this.$axios.get('/admin/user').then(resp => {
@@ -573,8 +474,6 @@ export default {
                 }
             })
         },
-
-
         // commitStatusChange(value, user) {
         //     if (user.username !== 'admin') {
         //         this.$axios.put('/admin/user/status', {
@@ -654,9 +553,9 @@ export default {
             console.log('selectedRowKeys changed: ', selectedRowKeys);
             this.selectedRowKeys = selectedRowKeys;
         },
-        onDelete(id) {
+        onDelete(key) {
             const data = [...this.data];
-            this.data = data.filter(item => item.id !== id);
+            this.data = data.filter(item => item.key !== key);
         },
         handleSearch(selectedKeys, confirm, dataIndex) {
             confirm();
@@ -679,30 +578,28 @@ export default {
             this.data = [...data, newData];
             this.count = count + 1;
         },
-        handleChange(value, id, column) {
+        handleChange(value, key, column) {
             const newData = [...this.data];
-            const target = newData.filter(item => id === item.id)[0];
-            console.log(column)
+            const target = newData.filter(item => key === item.key)[0];
             if (target) {
                 target[column] = value;
                 this.data = newData;
             }
         },
-        edit(id) {
+        edit(key) {
             const newData = [...this.data];
-            const target = newData.filter(item => id === item.id)[0];
-            this.editingKey = id;
+            const target = newData.filter(item => key === item.key)[0];
+            this.editingKey = key;
             if (target) {
                 target.editable = true;
                 this.data = newData;
             }
         },
-        save(id) {
-            let _this = this
+        save(key) {
             const newData = [...this.data];
             const newCacheData = [...this.cacheData];
-            const target = newData.filter(item => id === item.id)[0];
-            const targetCache = newCacheData.filter(item => id === item.id)[0];
+            const target = newData.filter(item => key === item.key)[0];
+            const targetCache = newCacheData.filter(item => key === item.key)[0];
             if (target && targetCache) {
                 delete target.editable;
                 this.data = newData;
@@ -710,33 +607,14 @@ export default {
                 this.cacheData = newCacheData;
             }
             this.editingKey = '';
-            console.log(this.data + " " + this.data.name + " " + this.data.phone + " " + this.data.email)
-            this.$axios.put('/admin/user', {
-                username: _this.data.username,
-                name: _this.data.name,
-                phone: _this.data.phone,
-                email: _this.data.email
-                // username: '_this.data.username',
-                // name: '_this.data.name',
-                // phone: '_this.data.phone',
-                // email: 'email@163.com'
-            }).then(resp => {
-                if (resp && resp.data.code === 200) {
-                    this.$alert('用户信息修改成功')
-                    // 修改角色后重新请求用户信息，实现视图更新
-                    this.listUsers()
-                } else {
-                    this.$alert(resp.data.message)
-                }
-            })
         },
-        cancel(id) {
+        cancel(key) {
 
             const newData = [...this.data];
-            const target = newData.filter(item => id === item.id)[0];
+            const target = newData.filter(item => key === item.key)[0];
             this.editingKey = '';
             if (target) {
-                Object.assign(target, this.cacheData.filter(item => id === item.id)[0]);
+                Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
                 delete target.editable;
                 this.data = newData;
             }
@@ -755,4 +633,3 @@ export default {
     margin-right: 8px;
 }
 </style>
-

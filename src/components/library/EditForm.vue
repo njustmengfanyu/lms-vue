@@ -36,9 +36,9 @@
                         <el-option label="科技" value="6"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="id" style="height: 0">
-                    <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
-                </el-form-item>
+<!--                <el-form-item prop="id" style="height: 0">-->
+<!--                    <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>-->
+<!--                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -91,7 +91,7 @@ export default {
         },
         onSubmit() {
             this.$axios
-                .post('/books', {
+                .post('/admin/content/books', {
                     id: this.form.id,
                     cover: this.form.cover,
                     title: this.form.title,
@@ -102,10 +102,17 @@ export default {
                     category: this.form.category
                 }).then(resp => {
                 if (resp && resp.status === 200) {
+                    console.log(resp.status)
                     this.dialogFormVisible = false
                     this.$emit('onSubmit')
                     this.$message.success('修改成功')
+                } else {
+                    console.log(resp.status)
+                    this.$message.error('提交错误')
                 }
+            })
+            .catch(err => {
+                this.$message.error('服务器错误')
             })
         },
         uploadImg () {
