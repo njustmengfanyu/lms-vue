@@ -12,7 +12,7 @@
                 </el-form-item>
                 <el-form-item label="功能配置" label-width="120px" prop="perms">
                     <el-checkbox-group v-model="selectedPermsIds">
-                        <el-checkbox v-for="(perm,i) in perms" :key="i" :label="perm.id">{{ perm.desc_ }}</el-checkbox>
+                        <el-checkbox v-for="(perm,i) in perms" :key="i" :label="perm.id">{{perm.desc_}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="菜单配置" label-width="120px" prop="menus">

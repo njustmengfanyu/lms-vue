@@ -138,6 +138,11 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
                     <el-input v-model="form.email" autocomplete="off" :placeholder="dialogForm_email"></el-input>
                 </el-form-item>
+                <el-form-item label="角色分配" label-width="120px" prop="roles">
+                    <el-checkbox-group v-model="selectedRolesIds" :max="1">
+                        <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
                 <!--                <el-form-item label="状态" :label-width="formLabelWidth" prop="enabled">-->
                 <!--                    <el-input v-model="form.enabled" autocomplete="off"></el-input>-->
                 <!--                </el-form-item>-->
@@ -187,7 +192,6 @@
 <script>
 
 const data = [];
-const roles = [];
 let obj = {};
 import BulkRegistration from './BulkRegistration'
 //2020.9.20 15.05 xiugaiqian
@@ -210,6 +214,8 @@ export default {
                 phone: '',
                 email: ''
             },
+            selectedRolesIds: [],
+
             dialogFormVisible: false,
             dialogFormVisible_add: false,
             dialogForm_id: 0,
@@ -217,14 +223,15 @@ export default {
             dialogForm_name: '',
             dialogForm_phone: '',
             dialogForm_email: '',
-            form: {
-                id: '',
-                username: '',
-                name: '',
-                phone: '',
-                email: '',
-                //enabled: '',
-            },
+            // form: {
+            //     id: '',
+            //     username: '',
+            //     name: '',
+            //     phone: '',
+            //     email: '',
+            //     //enabled: '',
+            // },
+            form: [],
             formLabelWidth: '120px',
 
             data,
@@ -232,7 +239,7 @@ export default {
             searchInput: null,
             searchedColumn: '',
             editingKey: '',
-            //roles,
+            roles: [],
             columns: [
                 {
                     title: 'id',
@@ -438,6 +445,15 @@ export default {
             }
         },
         onSubmit() {
+            let _this = this
+            let roles = []
+            for (let i = 0; i < _this.selectedRolesIds.length; i++) {
+                for (let j = 0; j < _this.roles.length; j++) {
+                    if (_this.selectedRolesIds[i] === _this.roles[j].id) {
+                        roles.push(_this.roles[j])
+                    }
+                }
+            }
             this.$axios
                 .put('/admin/user', {
                     id: this.dialogForm_id,
@@ -445,6 +461,7 @@ export default {
                     name: this.form.name,
                     phone: this.form.phone,
                     email: this.form.email,
+                    roles: roles
                     //enabled: this.form.enabled,
                 }).then(resp => {
                 if (resp && resp.status === 200) {
@@ -475,6 +492,7 @@ export default {
         listRoles() {
             let _this = this
             this.$axios.get('/admin/role').then(resp => {
+                console.log('/admin/role' + resp.data.code)
                 if (resp && resp.data.code === 200) {
                     _this.roles = resp.data.data
                 }
@@ -588,6 +606,11 @@ export default {
             this.dialogForm_name = item.name
             this.dialogForm_phone = item.phone
             this.dialogForm_email = item.email
+            let roleIds = []
+            for (let i = 0; i < item.roles.length; i++) {
+                roleIds.push(item.roles[i].id)
+            }
+            this.selectedRolesIds = roleIds
         }
     },
 };
