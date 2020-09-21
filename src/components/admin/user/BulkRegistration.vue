@@ -38,7 +38,7 @@
 
 <script>
     export default {
-        name: 'BulkRegistration',
+      name: 'BulkRegistration',
       data () {
         return {
           dialogFormVisible: false,

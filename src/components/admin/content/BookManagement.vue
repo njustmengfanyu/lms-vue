@@ -166,15 +166,16 @@
 <script>
 
 const data = [];
-const roles =[];
 let obj = {};
-//import BulkRegistration from './BulkRegistration'
+// import BulkRegistration from './BulkRegistration'
 //2020.9.20 15.05 xiugaiqian
+import ImgUpload from '../../library/ImgUpload'
 
 export default {
 
   name: 'UserProfile',
-  //components: {BulkRegistration},
+  // components: {BulkRegistration},
+  components: {ImgUpload},
   data() {
     this.cacheData = data.map(item => ({...item}));
     return {
@@ -207,7 +208,6 @@ export default {
       searchInput: null,
       searchedColumn: '',
       editingKey: '',
-      //roles,
       columns: [
         {
           title: 'id',

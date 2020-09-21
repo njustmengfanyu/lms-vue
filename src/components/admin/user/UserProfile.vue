@@ -154,13 +154,13 @@
 const data = [];
 const roles =[];
 let obj = {};
-//import BulkRegistration from './BulkRegistration'
+import BulkRegistration from './BulkRegistration'
 //2020.9.20 15.05 xiugaiqian
 
 export default {
 
   name: 'UserProfile',
-  //components: {BulkRegistration},
+  components: {BulkRegistration},
   data() {
     this.cacheData = data.map(item => ({...item}));
     return {
