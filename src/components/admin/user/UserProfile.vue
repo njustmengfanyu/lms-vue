@@ -362,16 +362,16 @@
                     <el-input  v-model="form.id" autocomplete="off" :placeholder="dialogForm_id" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
-                    <el-input v-model="form.username" autocomplete="off"></el-input>
+                    <el-input v-model="form.username" autocomplete="off" :placeholder="dialogForm_username"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" :label-width="formLabelWidth" prop="name">
-                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                    <el-input v-model="form.name" autocomplete="off" :placeholder="dialogForm_name"></el-input>
                 </el-form-item>
                 <el-form-item label="电话号码" :label-width="formLabelWidth" prop="phone">
-                    <el-input v-model="form.phone" autocomplete="off"></el-input>
+                    <el-input v-model="form.phone" autocomplete="off" :placeholder="dialogForm_phone"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
-                    <el-input v-model="form.email" autocomplete="off"></el-input>
+                    <el-input v-model="form.email" autocomplete="off" :placeholder="dialogForm_email"></el-input>
                 </el-form-item>
 <!--                <el-form-item label="状态" :label-width="formLabelWidth" prop="enabled">-->
 <!--                    <el-input v-model="form.enabled" autocomplete="off"></el-input>-->
@@ -401,6 +401,10 @@ export default {
         return {
             dialogFormVisible: false,
             dialogForm_id:0,
+            dialogForm_username:'',
+            dialogForm_name:'',
+            dialogForm_phone:'',
+            dialogForm_email:'',
             form: {
                 id: '',
                 username: '',
@@ -630,73 +634,6 @@ export default {
             })
         },
 
-
-        // commitStatusChange(value, user) {
-        //     if (user.username !== 'admin') {
-        //         this.$axios.put('/admin/user/status', {
-        //             enabled: value,
-        //             username: user.username
-        //         }).then(resp => {
-        //             if (resp && resp.data.code === 200) {
-        //                 if (value) {
-        //                     this.$message('用户 [' + user.username + '] 已启用')
-        //                 } else {
-        //                     this.$message('用户 [' + user.username + '] 已禁用')
-        //                 }
-        //             }
-        //         })
-        //     } else {
-        //         user.enabled = true
-        //         this.$alert('不能禁用管理员账户')
-        //     }
-        // },
-        // onSubmit(user) {
-        //     let _this = this
-        //     // 根据视图绑定的角色 id 向后端传送角色信息
-        //     let roles = []
-        //     for (let i = 0; i < _this.selectedRolesIds.length; i++) {
-        //         for (let j = 0; j < _this.roles.length; j++) {
-        //             if (_this.selectedRolesIds[i] === _this.roles[j].id) {
-        //                 roles.push(_this.roles[j])
-        //             }
-        //         }
-        //     }
-        //     this.$axios.put('/admin/user', {
-        //         username: user.username,
-        //         name: user.name,
-        //         phone: user.phone,
-        //         email: user.email,
-        //         roles: roles
-        //     }).then(resp => {
-        //         if (resp && resp.data.code === 200) {
-        //             this.$alert('用户信息修改成功')
-        //             this.dialogFormVisible = false
-        //             // 修改角色后重新请求用户信息，实现视图更新
-        //             this.listUsers()
-        //         } else {
-        //             this.$alert(resp.data.message)
-        //         }
-        //     })
-        // },
-        // editUser(user) {
-        //     this.dialogFormVisible = true
-        //     this.selectedUser = user
-        //     let roleIds = []
-        //     for (let i = 0; i < user.roles.length; i++) {
-        //         roleIds.push(user.roles[i].id)
-        //     }
-        //     this.selectedRolesIds = roleIds
-        // },
-        // resetPassword(username) {
-        //     this.$axios.put('/admin/user/password', {
-        //         username: username
-        //     }).then(resp => {
-        //         if (resp && resp.data.code === 200) {
-        //             this.$alert('密码已重置为 123')
-        //         }
-        //     })
-        // },
-
         //demo
         start() {
             this.loading = true;
@@ -800,6 +737,10 @@ export default {
             console.log(item)
             this.dialogFormVisible = true
             this.dialogForm_id=item.id
+            this.dialogForm_username=item.username
+            this.dialogForm_name=item.name
+            this.dialogForm_phone=item.phone
+            this.dialogForm_email=item.email
         }
     },
 };

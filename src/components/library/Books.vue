@@ -56,7 +56,7 @@ export default {
             let _this = this;
             this.$axios.get('/books').then(resp => {
                 if (resp && resp.status === 200) {
-                    _this.books = resp.data
+                    _this.books = resp.data.data
                     _this.currentPage = 1
                 }
             })
