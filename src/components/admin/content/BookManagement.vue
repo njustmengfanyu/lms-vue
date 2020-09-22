@@ -488,7 +488,6 @@ export default {
             category: this.form.category
           }).then(resp => {
         if (resp && resp.status === 200) {
-          console.log(resp.status)
           this.dialogFormVisible_add = false
           this.$emit('onSubmit_add')
           this.listBooks()
@@ -641,7 +640,7 @@ export default {
       })
           .then(resp => {
             if (resp && resp.data.code === 200) {
-              this.$alert('用户信息修改成功')
+              this.$alert('书籍信息修改成功')
               // 修改角色后重新请求用户信息，实现视图更新
               this.listUsers()
             } else {
