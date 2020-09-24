@@ -3,21 +3,22 @@
         <el-row style="height: 840px;">
             <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
             <el-popover placement="right" trigger="hover" width="250"
-                        v-for="item in books"
+                        v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                         v-bind:key="item.id">
                 <div>{{item.bookname}}<br/><br/>{{item.author}} / {{item.date}} /
                     {{item.press}}<br/><br/>{{item.abs}}</div>
 
                 <el-card slot="reference" style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="book"
                          body-style="padding:10px" shadow="hover">
-                    <div class="cover" @click="editBook(item)">
+<!--                    <div class="cover" @click="editBook(item)">-->
+                    <div class="cover">
                         <img :src="item.cover" alt="封面">
                     </div>
                     <div class="info">
                         <div class="title">
                             <a href="">{{item.bookname}}</a>
                         </div>
-                        <i class="el-icon-delete" @click="deleteBook(item.id)"></i>
+<!--                        <i class="el-icon-delete" @click="deleteBook(item.id)"></i>-->
                     </div>
                     <div class="author">{{item.author}}</div>
                 </el-card>
@@ -27,12 +28,12 @@
         <el-row>
             <el-pagination
                 @current-change="handleCurrentChange"
-                :current-page="books.currentPage"
-                :page-size="books.pagesize"
+                :current-page="currentPage"
+                :page-size.sync="pagesize"
+                :page-sizes="[18]"
                 :total="books.length">
             </el-pagination>
         </el-row>
-
 
     </div>
 </template>
@@ -40,12 +41,15 @@
 <script>
 import EditForm from './EditForm'
 import SearchBar from './SearchBar'
+
 export default {
     name: 'Books',
     components: {EditForm, SearchBar},
     data () {
         return {
             books: [],
+            currentPage: 1,
+            pagesize: 18
         }
     },
     mounted: function () {

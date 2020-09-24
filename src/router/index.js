@@ -2,13 +2,13 @@ import Vue from "vue/dist/vue.esm.js";
 import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 
-
+import Books from "@/components/library/Books"
 import show from "@/components/show"
 import AdminIndex from "@/components/admin/AdminIndex";
 import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
 import LibraryIndex from '../components/library/LibraryIndex'
-import wantedlist from '@/views/About'
+import wantedlist from '@/components/wantedlist'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -21,7 +21,7 @@ const routes = [
         name: "Home",
         //redirect: './home',
         component: Home,
-        redirect: '/index',
+        redirect: '/library',
         children: [
             {
                 path: '/index',
@@ -66,6 +66,11 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: "/wantedlist",
+        name: "wantedlist",
+        component: wantedlist
     },
     {
         path: "/about",
@@ -157,6 +162,14 @@ export const createRouter = routes => new Router(
                 }
             }
         ]
+    },
+    {
+        path: "/wantedlist",
+        name: "wantedlist",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: wantedlist
     },
     {
         path: "/about",

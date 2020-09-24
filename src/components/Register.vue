@@ -23,7 +23,11 @@
                           auto-complete="off" placeholder="E-Mail"></el-input>
             </el-form-item>
             <el-form-item style="width: 100%">
-                <el-button type="primary" style="width: 40%;background: #505458;border: none" @click="register('loginForm')">注册
+                <el-button type="primary" style="width: 80%;background: #3d94e3;border: none" @click="register('loginForm')">注册
+                </el-button>
+            </el-form-item>
+            <el-form-item style="width: 100%">
+                <el-button type="primary" style="width: 60%;background: #5c5659;border: none" @click="back()">已有账户，快来登录吧
                 </el-button>
             </el-form-item>
             <p>注册成功后页面会自动跳转哦！</p>
@@ -76,6 +80,9 @@ export default {
                     })
                 }
             })
+        },
+        back() {
+            this.$router.replace('/login')
         }
     }
 }
@@ -83,8 +90,8 @@ export default {
 
 <style>
 #paper {
-    background: url("../assets/bgimg.jpg") no-repeat;
-    margin: -8px;
+    background: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)),url("../assets/bgimg.jpg") no-repeat;
+    margin: 0;
     border: 0;
     height: 100%;
     width: 100%;
@@ -95,8 +102,8 @@ export default {
 .login-container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 90px auto;
-    width: 350px;
+    margin: 150px auto;
+    width: 450px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

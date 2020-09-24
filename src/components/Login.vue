@@ -15,9 +15,12 @@
             <el-button type="primary" style="width: 100%;background: #7c64ff;border: none" v-on:click="login">登录
             </el-button>
             <div class="space">
-
             </div>
             <el-button type="primary" style="width: 100%;background: #505458;border: none" @click="register">没有账号？还不快来注册！
+            </el-button>
+            <div class="space">
+            </div>
+            <el-button type="primary" style="width: 100%;background: #e85e5e;border: none" @click="forget">忘记密码了？试试来找回
             </el-button>
         </el-form-item>
     </el-form>
@@ -58,7 +61,7 @@ export default {
                         this.$msgbox.alert("登录成功，欢迎" + un)
                         _this.$store.commit('login', _this.loginForm)
                         let path = this.$route.query.redirect
-                        this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+                        this.$router.replace({path: path === '/' || path === undefined ? '/library' : path})
                     } else if (_this.loginForm.username === '' || _this.loginForm.username === ''){
                         this.$message.error("用户名或密码不能为空哦")
                     } else {
@@ -70,6 +73,9 @@ export default {
         },
         register() {
             this.$router.replace('/register')
+        },
+        forgrt() {
+
         }
     }
 }
@@ -78,7 +84,8 @@ export default {
 <style scoped>
 
 .poster {
-    background: url("../assets/bgimg.jpg") no-repeat ;
+    background: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)),url("../assets/bgimg.jpg") no-repeat ;
+
     margin: 0;
     border: 0;
     height: 100%;
@@ -94,7 +101,7 @@ export default {
 .login-container {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 90px auto;
+    margin: 150px auto;
     width: 450px;
     padding: 25px 35px 5px 35px;
     background: #fff;
