@@ -79,7 +79,7 @@ export default {
 
 .poster {
     background: url("../assets/bgimg.jpg") no-repeat ;
-    margin: -8px;
+    margin: 0;
     border: 0;
     height: 100%;
     width: 100%;

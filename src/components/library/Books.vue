@@ -71,7 +71,7 @@ export default {
                 .get('/search?keywords=' + this.$refs.searchBar.keywords, {
                 }).then(resp => {
                 if (resp && resp.status === 200) {
-                    _this.books = resp.data
+                    _this.books = resp.data.data
                 }
             })
         },

@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 
 
+import show from "@/components/show"
 import AdminIndex from "@/components/admin/AdminIndex";
 import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
@@ -74,6 +75,14 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
             import(/* webpackChunkName: "about" */ "../views/About.vue")
+    },
+    {
+        path: "/show",
+        name: "show",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: show
     },
     {
         path: '/login',
