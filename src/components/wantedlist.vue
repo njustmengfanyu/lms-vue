@@ -19,7 +19,7 @@
                             <a href="">{{item.bookname}}</a>
                         </div>
                         <!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
-                        <i class="el-icon-star-off" @click="wantedlist(item.id)"></i>
+                        <i class="el-icon-star-off" @click="deleteWantedList(item.id)"></i>
                     </div>
                     <div class="author">{{item.author}}</div>
                 </el-card>
@@ -92,6 +92,28 @@ export default {
         //         }
         //     })
         // },
+      deleteWantedList (id) {
+        let _this = this;
+        MessageBox.confirm('是否将此书移出收藏夹?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+              this.$axios
+                  .post('/wantedlist/books/delete', {
+                    bid: id,
+                    username: JSON.parse(window.localStorage.getItem('username' || '[]'))
+                  }).then(resp => {
+                if (resp && resp.status === 200) {
+                  _this.loadWantedList()
+                  Message.success("删除成功")
+                }
+              })
+            }
+        ).catch(() => {
+          Message.info("已取消删除")
+        })
+      },
         loadWantedList () {
             let _this = this;
             this.$axios.post('/wantedlist', {
