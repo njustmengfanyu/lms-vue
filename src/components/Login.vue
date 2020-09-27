@@ -59,7 +59,7 @@ export default {
                     if (successResponse.data.code === 200) {
                         let un = this.loginForm.username
                         this.$msgbox.alert("登录成功，欢迎" + un)
-                        _this.$store.commit('login', _this.loginForm)
+                        _this.$store.commit('login', un)
                         let path = this.$route.query.redirect
                         this.$router.replace({path: path === '/' || path === undefined ? '/library' : path})
                     } else if (_this.loginForm.username === '' || _this.loginForm.username === ''){

@@ -18,7 +18,8 @@
                         <div class="title">
                             <a href="">{{item.bookname}}</a>
                         </div>
-<!--                        <i class="el-icon-delete" @click="deleteBook(item.id)"></i>-->
+<!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
+                        <i class="el-icon-star-off" @click="wantedlist(item.id)"></i>
                     </div>
                     <div class="author">{{item.author}}</div>
                 </el-card>
@@ -41,12 +42,15 @@
 <script>
 import EditForm from './EditForm'
 import SearchBar from './SearchBar'
+import { MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 
 export default {
     name: 'Books',
     components: {EditForm, SearchBar},
     data () {
         return {
+            users: [],
             books: [],
             currentPage: 1,
             pagesize: 18
@@ -54,8 +58,17 @@ export default {
     },
     mounted: function () {
         this.loadBooks()
+        this.listUsers()
     },
     methods: {
+        listUsers() {
+            let _this = this
+            this.$axios.get('/admin/user').then(resp => {
+                if (resp && resp.data.code === 200) {
+                    _this.users = resp.data.data
+                }
+            })
+        },
         loadBooks () {
             let _this = this;
             this.$axios.get('/books').then(resp => {
@@ -65,9 +78,9 @@ export default {
                 }
             })
         },
+
         handleCurrentChange: function (currentPage) {
             this.currentPage = currentPage
-            console.log(this.currentPage)
         },
         searchResult () {
             let _this = this;
@@ -79,26 +92,35 @@ export default {
                 }
             })
         },
+        wantedlist (id) {
+            this.$axios.post('/addwantedlist', {
+                bid: id,
+                username: JSON.parse(window.localStorage.getItem('username' || '[]'))
+            }).then(resp => {
+                if (resp && resp.status === 200) {
+                    console.log("wantedlist " + id + " " + JSON.parse(window.localStorage.getItem('username' || '[]')))
+                    Message.success("添加成功")
+                }
+            })
+        },
         deleteBook (id) {
-            this.$confirm('此操作将永久删除该书籍, 是否继续?', '提示', {
+            let _this = this;
+            MessageBox.confirm('此操作将永久删除该书籍, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
                     this.$axios
-                        .post('/delete', {id: id}).then(resp => {
+                        .post('admin/content/books/delete', {id: id}).then(resp => {
                         if (resp && resp.status === 200) {
-                            this.loadBooks()
+                            _this.loadBooks()
+                            Message.success("删除成功")
                         }
                     })
                 }
             ).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                })
+                Message.info("已取消删除")
             })
-            // alert(id)
         },
         editBook (item) {
             this.$refs.edit.dialogFormVisible = true
@@ -148,16 +170,9 @@ img {
     text-align: left;
 }
 
-.el-icon-delete {
+.el-icon-star-off {
     cursor: pointer;
     float: right;
-}
-
-.switch {
-    display: flex;
-    position: absolute;
-    left: 780px;
-    top: 25px;
 }
 
 a {

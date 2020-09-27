@@ -1,8 +1,8 @@
 <template>
-    <div style="margin-bottom: 30px;display: flex;justify-content: center;align-items: center">
+    <div style="margin-bottom: 30px;margin-right: 120px; display: flex;justify-content: center;align-items: center">
         <el-input
             @keyup.enter.native="searchClick"
-            placeholder="通过书名或作者搜索..."
+            placeholder="通过书名或作者搜索"
             prefix-icon="el-icon-search"
             size="small"
             style="width: 400px;margin-right: 10px"

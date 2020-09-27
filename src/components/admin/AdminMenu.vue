@@ -5,9 +5,9 @@
         router
         withCredentials
         mode="vertical"
-        background-color="rgb(204, 204, 255)"
-        text-color="#fff"
-        active-text-color="#ffd04b"
+        background-color="#8ed0e1"
+        text-color="#000"
+        active-text-color="#fff"
         :collapse="isCollapse">
         <div style="height: 80px;"></div>
         <!--index 没有用但是必需字段-->
@@ -46,6 +46,9 @@ export default {
 <style scoped>
 .el-menu-admin {
     border-radius: 5px;
-    height: 100%;
+    height: 670px;
+    width: 220px;
+    margin-left: 15px;
+    /*padding-top: 15px;*/
 }
 </style>

@@ -1,19 +1,63 @@
 <template>
-    <el-container>
-<!--        <el-aside style="width: 200px;margin-top: 20px">-->
-<!--            <SideMenu @indexSelect="listByCategory" ref="sideMenu"></SideMenu>-->
-<!--        </el-aside>-->
-        <el-main>
-            <Books class="books-area" ref="booksArea"></Books>
-        </el-main>
-    </el-container>
+    <div class="wantedlistarea">
+        <el-row style="height: 840px;">
+            <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
+            <el-popover placement="right" trigger="hover" width="250"
+                        v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                        v-bind:key="item.id">
+                <div>{{item.bookname}}<br/><br/>{{item.author}} / {{item.date}} /
+                    {{item.press}}<br/><br/>{{item.abs}}</div>
+
+                <el-card slot="reference" style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="book"
+                         body-style="padding:10px" shadow="hover">
+                    <!--                    <div class="cover" @click="editBook(item)">-->
+                    <div class="cover">
+                        <img :src="item.cover" alt="封面">
+                    </div>
+                    <div class="info">
+                        <div class="title">
+                            <a href="">{{item.bookname}}</a>
+                        </div>
+                        <!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
+                        <i class="el-icon-star-off" @click="wantedlist(item.id)"></i>
+                    </div>
+                    <div class="author">{{item.author}}</div>
+                </el-card>
+            </el-popover>
+        </el-row>
+        <el-row>
+            <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-size.sync="pagesize"
+                :page-sizes="[18]"
+                :total="books.length">
+            </el-pagination>
+        </el-row>
+
+    </div>
 </template>
 
 <script>
 import Books from './library/Books'
+import EditForm from './library/EditForm'
+import SearchBar from './library/SearchBar'
+import { MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 export default {
     name: "wantedlist",
-    components: {Books},
+    components: {Books, EditForm, SearchBar},
+    data() {
+        return {
+            users: [],
+            books: [],
+            currentPage: 1,
+            pagesize: 18
+        }
+    },
+    mounted: function () {
+        this.loadWantedList()
+    },
     methods: {
         listByCategory () {
             let _this = this;
@@ -25,16 +69,81 @@ export default {
                     _this.$refs.booksArea.currentPage = 1
                 }
             })
-        }
+        },
+        handleCurrentChange: function (currentPage) {
+            this.currentPage = currentPage
+        },
+        searchResult () {
+            let _this = this;
+            this.$axios
+                .get('/search?keywords=' + this.$refs.searchBar.keywords, {
+                }).then(resp => {
+                if (resp && resp.status === 200) {
+                    _this.books = resp.data.data
+                }
+            })
+        },
+        // loadBooks () {
+        //     let _this = this;
+        //     this.$axios.get('/books').then(resp => {
+        //         if (resp && resp.status === 200) {
+        //             _this.books = resp.data.data
+        //             _this.currentPage = 1
+        //         }
+        //     })
+        // },
+        loadWantedList () {
+            let _this = this;
+            this.$axios.post('/wantedlist', {
+                username: JSON.parse(window.localStorage.getItem('username' || '[]'))
+            }).then(resp => {
+                if (resp && resp.status === 200) {
+                    _this.books = resp.data.data
+                    _this.currentPage = 1
+                }
+            })
+        },
     }
 }
 </script>
 
 <style scoped>
-.books-area {
-    padding-left: 50px;
+
+.cover {
+    width: 115px;
+    height: 172px;
+    margin-bottom: 7px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+img {
+    width: 115px;
+    height: 172px;
+    /*margin: 0 auto;*/
+}
+
+.title {
+    font-size: 14px;
+    text-align: left;
+}
+
+.author {
+    color: #333;
+    width: 102px;
+    font-size: 13px;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.wantedlistarea {
     width: 990px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.el-icon-star-off {
+    cursor: pointer;
+    float: right;
 }
 </style>
