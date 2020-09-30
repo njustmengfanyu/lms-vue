@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 
 import Books from "@/components/library/Books"
+import Forget from "@/components/forget"
 import show from "@/components/show"
 import AdminIndex from "@/components/admin/AdminIndex";
 import AppIndex from '@/components/home/AppIndex'
@@ -46,6 +47,14 @@ const routes = [
                 meta: {
                     requireAuth: true
                 }
+            },
+            {
+                path: "/show",
+                name: "show",
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: show
             }
         ]
     },
@@ -82,17 +91,14 @@ const routes = [
             import(/* webpackChunkName: "about" */ "../views/About.vue")
     },
     {
-        path: "/show",
-        name: "show",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: show
-    },
-    {
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/forget',
+        name: 'forget',
+        component: Forget
     },
     {
         path: '/',
@@ -142,7 +148,15 @@ export const createRouter = routes => new Router(
                 meta: {
                     requireAuth: true
                 }
-            }
+            },
+            {
+                path: "/show",
+                name: "show",
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: show
+            },
         ]
     },
     {
@@ -184,6 +198,11 @@ export const createRouter = routes => new Router(
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/forget',
+        name: 'forget',
+        component: Forget
     },
     {
         path: '/',

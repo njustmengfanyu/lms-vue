@@ -599,7 +599,6 @@ export default {
             }
         },
         editNode: function (item) {
-            console.log(item)
             this.dialogFormVisible = true
             this.dialogForm_id = item.id
             this.dialogForm_username = item.username

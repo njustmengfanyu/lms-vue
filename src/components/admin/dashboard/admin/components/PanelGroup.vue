@@ -7,9 +7,9 @@
                 </div>
                 <div class="card-panel-description">
                     <div class="card-panel-text">
-                        New Visits
+                        访客量
                     </div>
-                    <count-to :start-val="0" :end-val="3735" :duration="2600" class="card-panel-num"/>
+                    <count-to :start-val="0" :end-val="6" :duration="3" class="card-panel-num"/>
                 </div>
             </div>
         </el-col>
@@ -20,9 +20,9 @@
                 </div>
                 <div class="card-panel-description">
                     <div class="card-panel-text">
-                        Messages
+                        Issues
                     </div>
-                    <count-to :start-val="0" :end-val="676" :duration="3000" class="card-panel-num"/>
+                    <count-to :start-val="0" :end-val="0" :duration="3000" class="card-panel-num"/>
                 </div>
             </div>
         </el-col>
@@ -35,7 +35,7 @@
                     <div class="card-panel-text">
                         Stars
                     </div>
-                    <count-to :start-val="0" :end-val="292" :duration="3200" class="card-panel-num"/>
+                    <count-to :start-val="0" :end-val="1" :duration="3200" class="card-panel-num"/>
                 </div>
             </div>
         </el-col>
@@ -46,9 +46,9 @@
                 </div>
                 <div class="card-panel-description">
                     <div class="card-panel-text">
-                        Donations
+                        运行时间
                     </div>
-                    <count-to :start-val="0" :end-val="7690" :duration="3600" class="card-panel-num"/>
+                    <count-to :start-val="0" :end-val="30" :duration="3600" class="card-panel-num"/>
                 </div>
             </div>
         </el-col>

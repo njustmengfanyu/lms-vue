@@ -15,9 +15,9 @@ import Books from './Books'
 
 export default {
     name: 'LibraryIndex',
-    components: {SideMenu,Books},
+    components: {SideMenu, Books},
     methods: {
-        listByCategory () {
+        listByCategory() {
             let _this = this;
             let cid = this.$refs.sideMenu.cid;
             let url = 'categories/' + cid + '/books';

@@ -1,6 +1,6 @@
 <template>
     <div id="paper">
-        <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" class="login-container" >
+        <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" class="login-container">
             <h3 class="login_title">用户注册</h3>
             <el-form-item prop="username">
                 <el-input type="text" v-model="loginForm.username"
@@ -23,7 +23,8 @@
                           auto-complete="off" placeholder="E-Mail"></el-input>
             </el-form-item>
             <el-form-item style="width: 100%">
-                <el-button type="primary" style="width: 80%;background: #3d94e3;border: none" @click="register('loginForm')">注册
+                <el-button type="primary" style="width: 80%;background: #3d94e3;border: none"
+                           @click="register('loginForm')">注册
                 </el-button>
             </el-form-item>
             <el-form-item style="width: 100%">
@@ -90,7 +91,7 @@ export default {
 
 <style>
 #paper {
-    background: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)),url("../assets/bgimg.jpg") no-repeat;
+    background: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)), url("../assets/bgimg.jpg") no-repeat;
     margin: 0;
     border: 0;
     height: 100%;

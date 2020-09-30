@@ -1,6 +1,6 @@
 <template>
     <el-card class="admin-header" style="background-color: #fff">
-        <span style="font-size: 28px;font-weight: bold;position:absolute;left: 10px">图书管理系统后台</span>
+        <span style="font-size: 28px;font-weight: bold;position:absolute;left: 10px">云中书后台</span>
         <a-button type="primary" v-on:click="backward" style="margin-left: 100px; font-size: 18px">
             <a-icon type="left"/>
             返回前台

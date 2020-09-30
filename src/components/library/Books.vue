@@ -5,23 +5,28 @@
             <el-popover placement="right" trigger="hover" width="250"
                         v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                         v-bind:key="item.id">
-                <div>{{item.bookname}}<br/><br/>{{item.author}} / {{item.date}} /
-                    {{item.press}}<br/><br/>{{item.abs}}</div>
+                <div>{{ item.bookname }}<br/><br/>{{ item.author }} / {{ item.date }} /
+                    {{ item.press }}<br/><br/>{{ item.abs }}
+                </div>
 
-                <el-card slot="reference" style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="book"
+                <el-card slot="reference"
+                         style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px"
+                         class="book"
                          body-style="padding:10px" shadow="hover">
-<!--                    <div class="cover" @click="editBook(item)">-->
+                    <!--                    <div class="cover" @click="editBook(item)">-->
                     <div class="cover">
-                        <img :src="item.cover" alt="封面">
+                        <a slot="actions" :href="'/show?id='+item.id">
+                            <img :src="item.cover" alt="封面">
+                        </a>
                     </div>
                     <div class="info">
                         <div class="title">
-                            <a href="">{{item.bookname}}</a>
+                            <a href="">{{ item.bookname }}</a>
                         </div>
-<!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
-                        <i class="el-icon-star-off" @click="wantedlist(item.id)"></i>
+                        <!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
+                        <i class="el-icon-plus" @click="wantedlist(item.id)"></i>
                     </div>
-                    <div class="author">{{item.author}}</div>
+                    <div class="author">{{ item.author }}</div>
                 </el-card>
             </el-popover>
             <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>
@@ -42,18 +47,20 @@
 <script>
 import EditForm from './EditForm'
 import SearchBar from './SearchBar'
-import { MessageBox } from 'element-ui'
-import { Message } from 'element-ui'
+import {MessageBox} from 'element-ui'
+import {Message} from 'element-ui'
 
 export default {
     name: 'Books',
     components: {EditForm, SearchBar},
-    data () {
+    data() {
         return {
             users: [],
             books: [],
             currentPage: 1,
-            pagesize: 18
+            pagesize: 18,
+            isLiked: 0,
+            url: 4
         }
     },
     mounted: function () {
@@ -69,7 +76,7 @@ export default {
                 }
             })
         },
-        loadBooks () {
+        loadBooks() {
             let _this = this;
             this.$axios.get('/books').then(resp => {
                 if (resp && resp.status === 200) {
@@ -78,32 +85,39 @@ export default {
                 }
             })
         },
-
         handleCurrentChange: function (currentPage) {
             this.currentPage = currentPage
         },
-        searchResult () {
+        searchResult() {
             let _this = this;
             this.$axios
-                .get('/search?keywords=' + this.$refs.searchBar.keywords, {
-                }).then(resp => {
+                .get('/search?keywords=' + this.$refs.searchBar.keywords, {}).then(resp => {
                 if (resp && resp.status === 200) {
                     _this.books = resp.data.data
                 }
             })
         },
-        wantedlist (id) {
-            this.$axios.post('/addwantedlist', {
-                bid: id,
-                username: JSON.parse(window.localStorage.getItem('username' || '[]'))
-            }).then(resp => {
-                if (resp && resp.status === 200) {
-                    console.log("wantedlist " + id + " " + JSON.parse(window.localStorage.getItem('username' || '[]')))
-                    Message.success("添加成功")
-                }
+        wantedlist(id) {
+            MessageBox.confirm('确定要添加到收藏夹中吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$axios.post('/addwantedlist', {
+                    bid: id,
+                    username: JSON.parse(window.localStorage.getItem('username' || '[]'))
+                }).then(resp => {
+                    if (resp && resp.status === 200) {
+                        console.log("wantedlist " + id + " " + JSON.parse(window.localStorage.getItem('username' || '[]')))
+                        Message.success("添加成功")
+                    }
+                })
+                this.isLiked = 1
+            }).catch(() => {
+                Message.info("已取消操作")
             })
         },
-        deleteBook (id) {
+        deleteBook(id) {
             let _this = this;
             MessageBox.confirm('此操作将永久删除该书籍, 是否继续?', '提示', {
                 confirmButtonText: '确定',
@@ -122,7 +136,7 @@ export default {
                 Message.info("已取消删除")
             })
         },
-        editBook (item) {
+        editBook(item) {
             this.$refs.edit.dialogFormVisible = true
             this.$refs.edit.form = {
                 id: item.id,
@@ -170,7 +184,7 @@ img {
     text-align: left;
 }
 
-.el-icon-star-off {
+.el-icon-plus {
     cursor: pointer;
     float: right;
 }

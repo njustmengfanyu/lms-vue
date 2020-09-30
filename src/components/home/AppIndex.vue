@@ -6,10 +6,14 @@
             </p>
         </div>
         <a-carousel autoplay>
-            <div><h3>欢迎来到图书管理系统</h3></div>
-            <div><h3>好书推荐</h3></div>
-            <div><h3>每日一问</h3></div>
-            <div><h3>会员充值（爬）</h3></div>
+            <div><h3>做最懂你的最安全的书库</h3></div>
+            <div><h3>项目后端地址:</h3></div>
+            <div>
+                <h3>
+                    https://github.com/njustmengfanyu/LibraryManagementSystem
+                </h3>
+            </div>
+            <div><h3>项目前端地址:https://github.com/njustmengfanyu/lms-vue</h3></div>
         </a-carousel>
     </div>
 </template>
@@ -20,7 +24,7 @@ export default {
 };
 </script>
 <style scoped>
-/* For demo */
+
 .ap {
     margin: auto;
     width: 100%;
@@ -71,20 +75,23 @@ export default {
     border-radius: 0 0 115px;
     z-index: 1;
 }
-#mission>.mission {
+
+#mission > .mission {
     font-weight: 500;
     font-size: 28px;
     line-height: .31rem;
     color: #828282;
     text-align: left;
 }
-#mission>.desc {
+
+#mission > .desc {
     margin-top: .35rem;
     font-weight: 500;
     font-size: 48px;
     line-height: 1.25;
     text-align: left;
 }
+
 p {
     margin-top: 0;
     margin-bottom: 1em;
