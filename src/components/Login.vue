@@ -50,6 +50,8 @@ export default {
          * 获取登录前页面的路径并跳转，如果该路径不存在，则跳转到首页
          */
         login() {
+            let date = new Date()
+            let hour = date.getHours()
             let _this = this;
             console.log(this.$store.state)
             this.$axios
@@ -60,7 +62,17 @@ export default {
                 .then(successResponse => {
                     if (successResponse.data.code === 200) {
                         let un = this.loginForm.username
-                        this.$msgbox.alert("登录成功，欢迎" + un)
+                        if (hour <= 8) {
+                            this.$msgbox.alert("登录成功，一日之计在于晨，欢迎" + un)
+                        } else if (hour > 8 && hour <= 11) {
+                            this.$msgbox.alert("登录成功，享受书籍的乐趣吧，欢迎" + un)
+                        } else if (hour > 11 && hour <= 13) {
+                            this.$msgbox.alert("登录成功，该吃午饭了哦，欢迎" + un)
+                        } else if (hour > 13 && hour <= 17) {
+                            this.$msgbox.alert("登录成功，来杯下午茶吧，欢迎" + un)
+                        } else if (hour > 17 && hour <= 24) {
+                            this.$msgbox.alert("登录成功，今天也要早点休息哦，欢迎" + un)
+                        }
                         _this.$store.commit('login', un)
                         let path = this.$route.query.redirect
                         this.$router.replace({path: path === '/' || path === undefined ? '/library' : path})

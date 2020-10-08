@@ -30,6 +30,9 @@
                                 <el-button type="primary" class="button" icon="el-icon-star-on"
                                            style="height: 35px;width: 130px" @click="wantedlist(book.id)">点击收藏
                                 </el-button>
+                                <el-button type="primary" class="button1" icon="el-icon-back"
+                                           style="height: 35px;width: 40px" @click="back()">
+                                </el-button>
                             </div>
                         </div>
                     </el-card>
@@ -90,6 +93,10 @@ export default {
                 Message.info("已取消操作")
             })
         },
+        back() {
+            //返回上一级
+            this.$router.go(-1)
+        }
     }
 }
 </script>
@@ -147,7 +154,14 @@ time {
     padding: 0;
     float: right;
     font-size: 20px;
-    margin-right: 55px;
+    margin-right: 25px;
+}
+
+.button1 {
+    padding: 0;
+    float: left;
+    font-size: 24px;
+    margin-right: 15px;
 }
 
 .image {

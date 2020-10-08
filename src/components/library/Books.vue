@@ -2,18 +2,18 @@
     <div>
         <el-row style="height: 840px;">
             <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
-            <el-popover placement="right" trigger="hover" width="250"
+            <el-popover placement="right" trigger="hover" width="60"
                         v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                         v-bind:key="item.id">
-                <div>{{ item.bookname }}<br/><br/>{{ item.author }} / {{ item.date }} /
-                    {{ item.press }}<br/><br/>{{ item.abs }}
-                </div>
+<!--                <div>{{ item.bookname }}<br/><br/>{{ item.author }} / {{ item.date }} /-->
+<!--                    {{ item.press }}<br/><br/>{{ item.abs }}-->
+<!--                </div>-->
+                <div>点击查看详情</div>
 
                 <el-card slot="reference"
                          style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px"
                          class="book"
                          body-style="padding:10px" shadow="hover">
-                    <!--                    <div class="cover" @click="editBook(item)">-->
                     <div class="cover">
                         <a slot="actions" :href="'/show?id='+item.id">
                             <img :src="item.cover" alt="封面">

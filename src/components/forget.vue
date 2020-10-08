@@ -14,7 +14,7 @@
                 <el-input
                     class="log-input"
                     v-model="loginForm.seccode"
-                    placeholder="验证码"
+                    placeholder="请输入验证码  区分大小写"
                     @keydown.enter.native="reset('loginForm')"
                 >
                 </el-input>
@@ -23,9 +23,10 @@
             <el-form-item style="width: 100%">
                 <el-button type="primary" style="width: 100%;background: #7c64ff;border: none" v-on:click="reset">重置密码
                 </el-button>
-                <div class="space">
-                </div>
-
+            </el-form-item>
+            <el-form-item style="width: 100%">
+                <el-button type="primary" style="width: 100%;background: #1fc749;border: none" v-on:click="back()">返回登录
+                </el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -41,7 +42,6 @@ export default {
             loginForm: {
                 username: '',
                 seccode:''
-                // password: ''
             },
             loginrule: {
                 username: {require: true, message: "用户名不能为空"}
@@ -65,28 +65,14 @@ export default {
             this.$axios
                 .put('/user/password', {
                     username: this.loginForm.username
-                    // password: this.loginForm.password
                 })
                 .then(resp => {
-                    // if (successResponse.data.code === 200) {
-                    //     let un = this.loginForm.username
-                    //     this.$msgbox.alert("登录成功，欢迎" + un)
-                    //     _this.$store.commit('login', un)
-                    //     let path = this.$route.query.redirect
-                    //     this.$router.replace({path: path === '/' || path === undefined ? '/library' : path})
-                    // } else if (_this.loginForm.username === '' || _this.loginForm.username === '') {
-                    //     this.$message.error("用户名或密码不能为空哦")
-                    // } else {
-                    //     this.$message.error("用户名或密码不正确哦")
-                    // }
                     if (resp.status === 200) {
                         this.$msgbox.alert("重置密码成功，新密码是123")
                         this.$router.replace('/login')
                     } else if (_this.loginForm.username === '') {
                         this.$message.error("用户名不能为空哦")
                     }
-                })
-                .catch(failResponse => {
                 })
         },
         createCode() {
@@ -100,6 +86,9 @@ export default {
             }
             this.checkCode = code; //把code值赋给验证码
         },
+        back() {
+            this.$router.replace('/login')
+        }
     }
 }
 </script>
