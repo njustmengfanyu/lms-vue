@@ -9,7 +9,7 @@
             <el-button circle size="mini" style="float: right;margin-right: 30px;margin-top: -50px">
                 <el-dropdown :hide-on-click="false" @command="handleCommand">
                     <div>
-                        <el-avatar class="avatar">
+                        <el-avatar class="avatar" style="background-color: #71adea">
                             {{ press.slice(0,1).toUpperCase() }}
                         </el-avatar>
                     </div>

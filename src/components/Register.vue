@@ -54,7 +54,7 @@ export default {
                 phone: [{required: true, message: '电话号码不能为空', trigger: 'change'},
                     {pattern:/^0?(13[0-9]|15[7-9]|153|156|18[7-9]|198)[0-9]{8}$/,min:11,max:11,message: '输入的手机号码有误',trigger: 'blur'}],
                 email: [{required: true, message: '邮箱地址不能为空', trigger: 'change'},
-                    { pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,message: '邮箱地址有误'}],
+                    {pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,message: '邮箱地址有误'}],
             },
             checked: true
         }

@@ -202,8 +202,10 @@ export default {
                 username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
                 password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
                 name: [{required: true, message: '真实姓名不能为空', trigger: 'blur'}],
-                phone: [{required: true, message: '手机号码不能为空', trigger: 'blur'}],
-                email: [{required: true, message: '电子邮箱不能为空', trigger: 'blur'}]
+                phone: [{required: true, message: '手机号码不能为空', trigger: 'blur'},
+                    {pattern:/^0?(13[0-9]|15[7-9]|153|156|18[7-9]|198)[0-9]{8}$/,min:11,max:11,message: '输入的手机号码有误',trigger: 'blur'}],
+                email: [{required: true, message: '电子邮箱不能为空', trigger: 'blur'},
+                    {pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,message: '邮箱地址有误'}]
             },
             submitRules: {
                 username: [{require: true, message: "用户名不能为空"}],
