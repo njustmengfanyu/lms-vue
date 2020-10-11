@@ -5,9 +5,6 @@
             <el-popover placement="right" trigger="hover" width="60"
                         v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                         v-bind:key="item.id">
-<!--                <div>{{ item.bookname }}<br/><br/>{{ item.author }} / {{ item.date }} /-->
-<!--                    {{ item.press }}<br/><br/>{{ item.abs }}-->
-<!--                </div>-->
                 <div>点击查看详情</div>
 
                 <el-card slot="reference"

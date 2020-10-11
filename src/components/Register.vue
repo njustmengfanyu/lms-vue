@@ -39,7 +39,22 @@
 export default {
     name: "register",
     data() {
+        const enName = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error('请输入真实姓名'))
+            } else {
+                const reg1 = /^[a-zA-Z]+$/ // 验证没有空格的英文名
+                const reg2 = /^[a-zA-Z][A-Za-z\s]*[a-zA-Z]*$/
+                const reg3 = /^[\u4e00-\u9fa5]+$/
+                if (value.length < 100 && (reg1.test(value) || reg2.test(value) || reg3.test(value))) {
+                    callback()
+                } else {
+                    return callback(new Error('请输入正确的名字'))
+                }
+            }
+        }
         return {
+
             loginForm: {
                 username: '',
                 password: '',
@@ -50,11 +65,17 @@ export default {
             rules: {
                 username: [{required: true, message: '账号不能为空', trigger: 'blur'},],
                 password: [{required: true, message: '密码不能为空', trigger: 'blur'},],
-                name: [{required: true, message: '姓名不能为空', trigger: 'change'},],
+                name: [{required: true, validator:enName, trigger: 'change'},],
                 phone: [{required: true, message: '电话号码不能为空', trigger: 'change'},
-                    {pattern:/^0?(13[0-9]|15[7-9]|153|156|18[7-9]|198)[0-9]{8}$/,min:11,max:11,message: '输入的手机号码有误',trigger: 'blur'}],
+                    {
+                        pattern: /^0?(13[0-9]|15[7-9]|153|156|18[7-9]|198)[0-9]{8}$/,
+                        min: 11,
+                        max: 11,
+                        message: '输入的手机号码有误',
+                        trigger: 'blur'
+                    }],
                 email: [{required: true, message: '邮箱地址不能为空', trigger: 'change'},
-                    {pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,message: '邮箱地址有误'}],
+                    {pattern: /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: '邮箱地址有误'}],
             },
             checked: true
         }
@@ -70,8 +91,7 @@ export default {
                                 confirmButtonText: '确定'
                             })
                             _this.$router.replace('/login')
-                        }
-                        else {
+                        } else {
                             this.$alert(resp.data.message, '提示', {
                                 confirmButtonText: '确定'
                             })
