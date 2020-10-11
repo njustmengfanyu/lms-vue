@@ -17,7 +17,7 @@
             </a-button>
             <span style="margin-left: 8px">
                 <template v-if="hasSelected">
-                    {{ `Selected ${selectedRowKeys.length} items` }}
+                    {{ `已选择 ${selectedRowKeys.length} 项` }}
                 </template>
             </span>
         </div>
@@ -110,7 +110,6 @@
                         </a-popconfirm>
                     </span>
                     <span v-else>
-<!--                        <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>-->
                          <a :disabled="editingKey !== ''" @click="editNode(record)">编辑</a>
                     </span>
                 </div>
@@ -121,7 +120,7 @@
             title="修改用户信息"
             :visible.sync="dialogFormVisible"
             @close="clear">
-            <el-form v-model="form" style="text-align: left" ref="dataForm">
+            <el-form v-model="form" style="text-align: left" ref="dataForm" :rules="submitRules">
                 <el-form-item label="id" :label-width="formLabelWidth" prop="id">
                     <el-input v-model="form.id" autocomplete="off" :placeholder="dialogForm_id"
                               :disabled="true"></el-input>
@@ -143,9 +142,6 @@
                         <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <!--                <el-form-item label="状态" :label-width="formLabelWidth" prop="enabled">-->
-                <!--                    <el-input v-model="form.enabled" autocomplete="off"></el-input>-->
-                <!--                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -155,9 +151,10 @@
         <el-dialog
             title="添加用户"
             :visible.sync="dialogFormVisible_add"
+            :before-close="handleClose"
             @close="clear_add"
             width="25%">
-            <el-form :model="loginForm" :rules="rules" label-position="left"
+            <el-form :model="loginForm" :rules="rules" label-position="left" ref="loginForm"
                      label-width="0px">
                 <el-form-item prop="username">
                     <el-input type="text" v-model="loginForm.username"
@@ -167,35 +164,33 @@
                     <el-input type="password" v-model="loginForm.password"
                               auto-complete="off" placeholder="密码"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="name">
                     <el-input type="text" v-model="loginForm.name"
                               auto-complete="off" placeholder="真实姓名"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="phone">
                     <el-input type="text" v-model="loginForm.phone"
                               auto-complete="off" placeholder="电话号码"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="email">
                     <el-input type="text" v-model="loginForm.email"
                               auto-complete="off" placeholder="E-Mail"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible_add = false">取 消</el-button>
-                <el-button type="primary" @click="register_add(loginForm)">确 定</el-button>
+                <el-button @click="dialogFormVisible_add = false;resetForm('loginForm')">取 消</el-button>
+                <el-button type="primary" @click="register_add('loginForm')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
-
-
 </template>
 <script>
 
 const data = [];
 let obj = {};
 import BulkRegistration from './BulkRegistration'
-//2020.9.20 15.05 xiugaiqian
-
+import {MessageBox} from 'element-ui'
+import {Message} from 'element-ui'
 export default {
 
     name: 'UserProfile',
@@ -205,7 +200,16 @@ export default {
         return {
             rules: {
                 username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
-                password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
+                password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+                name: [{required: true, message: '真实姓名不能为空', trigger: 'blur'}],
+                phone: [{required: true, message: '手机号码不能为空', trigger: 'blur'}],
+                email: [{required: true, message: '电子邮箱不能为空', trigger: 'blur'}]
+            },
+            submitRules: {
+                username: [{require: true, message: "用户名不能为空"}],
+                name: [{require: true, message: "真实姓名不能为空"}],
+                phone: [{require: true, message: "电话号码不能为空"}],
+                email: [{require: true, message: "电子邮箱不能为空"}]
             },
             loginForm: {
                 username: '',
@@ -214,6 +218,7 @@ export default {
                 phone: '',
                 email: ''
             },
+
             selectedRolesIds: [],
 
             dialogFormVisible: false,
@@ -223,15 +228,15 @@ export default {
             dialogForm_name: '',
             dialogForm_phone: '',
             dialogForm_email: '',
-            // form: {
-            //     id: '',
-            //     username: '',
-            //     name: '',
-            //     phone: '',
-            //     email: '',
-            //     //enabled: '',
-            // },
-            form: [],
+            //form: [],//正常版本
+            form: {
+                id: '',
+                username: '',
+                name: '',
+                phone: '',
+                email: '',
+                roles: []
+            },
             formLabelWidth: '120px',
 
             data,
@@ -401,7 +406,17 @@ export default {
         addNode() {
             this.dialogFormVisible_add = true
         },
-
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        handleClose(done) {
+            MessageBox.confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                    this.resetForm('loginForm')
+                })
+                .catch(_ => {});
+        },
         clear_add() {
             this.loginForm = {
                 username: '',
@@ -413,24 +428,28 @@ export default {
         },
         register_add(formName) {
             let _this = this
-            this.$axios.post('/register', this.loginForm)
-                .then(resp => {
-                    if (resp.data.code === 200) {
-                        this.$alert('注册成功', '提示', {
-                            confirmButtonText: '确定',
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$axios.post('/register', this.loginForm)
+                        .then(resp => {
+                            if (resp.data.code === 200) {
+                                this.$alert('注册成功', '提示', {
+                                    confirmButtonText: '确定',
+                                })
+                                _this.dialogFormVisible_add = false
+                                _this.clear_add()
+                                _this.listUsers()
+                                // this.$emit('onSubmit_add')
+                            } else {
+                                _this.$alert(resp.data.message, '提示', {
+                                    confirmButtonText: '确定'
+                                })
+                            }
                         })
-                        this.dialogFormVisible_add = false
-                        this.clear_add()
-                        this.listUsers()
-                        // this.$emit('onSubmit_add')
-                    } else {
-                        this.$alert(resp.data.message, '提示', {
-                            confirmButtonText: '确定'
+                        .catch(failResponse => {
                         })
-                    }
-                })
-                .catch(failResponse => {
-                })
+                }
+            })
         },
 
 
@@ -462,17 +481,14 @@ export default {
                     phone: this.form.phone,
                     email: this.form.email,
                     roles: roles
-                    //enabled: this.form.enabled,
                 }).then(resp => {
-                if (resp && resp.status === 200) {
-                    console.log(resp.status)
+                if (resp && resp.data.code === 200) {
                     this.dialogFormVisible = false
                     this.$emit('onSubmit')
                     this.$message.success(resp.data.message)
                     this.listUsers()
                 } else {
-                    console.log(resp.status)
-                    this.$message.error('提交错误')
+                    this.$msgbox.alert('表单必须填写完整')
                 }
             })
                 .catch(err => {
@@ -492,7 +508,6 @@ export default {
         listRoles() {
             let _this = this
             this.$axios.get('/admin/role').then(resp => {
-                console.log('/admin/role' + resp.data.code)
                 if (resp && resp.data.code === 200) {
                     _this.roles = resp.data.data
                 }
@@ -502,14 +517,12 @@ export default {
         //demo
         start() {
             this.loading = true;
-            // ajax request after empty completing
             setTimeout(() => {
                 this.loading = false;
                 this.selectedRowKeys = [];
             }, 500);
         },
         onSelectChange(selectedRowKeys) {
-            console.log('selectedRowKeys changed: ', selectedRowKeys);
             this.selectedRowKeys = selectedRowKeys;
         },
         onDelete(id) {

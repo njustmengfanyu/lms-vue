@@ -46,14 +46,13 @@ export default {
     },
     methods: {
         /**
-         * 受到后端返回的成功代码时，触发store中的login()方法，把loginForm对象传递给store中的user对象
+         * 受到后端返回的成功代码时，触发 store中的 login()方法，把 loginForm对象传递给 store中的 user对象
          * 获取登录前页面的路径并跳转，如果该路径不存在，则跳转到首页
          */
         login() {
             let date = new Date()
             let hour = date.getHours()
             let _this = this;
-            console.log(this.$store.state)
             this.$axios
                 .post('/login', {
                     username: this.loginForm.username,

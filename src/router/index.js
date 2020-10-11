@@ -11,6 +11,7 @@ import Login from '@/components/Login'
 import LibraryIndex from '../components/library/LibraryIndex'
 import wantedlist from '@/components/wantedlist'
 import Element from 'element-ui'
+import userinfo from '@/components/UserInfo'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Element)
@@ -55,6 +56,14 @@ const routes = [
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
                 component: show
+            },
+            {
+                path: '/userinfo',
+                name: 'userinfo',
+                component: userinfo,
+                meta: {
+                    requireAuth: true
+                }
             }
         ]
     },
@@ -157,6 +166,14 @@ export const createRouter = routes => new Router(
                 // which is lazy-loaded when the route is visited.
                 component: show
             },
+            {
+                path: '/userinfo',
+                name: 'userinfo',
+                component: userinfo,
+                meta: {
+                    requireAuth: true
+                }
+            }
         ]
     },
     {

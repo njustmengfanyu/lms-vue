@@ -9,6 +9,7 @@ import antui, {Button} from 'ant-design-vue';
 import 'element-ui/lib/theme-chalk/index.css'
 import 'ant-design-vue/dist/antd.css';
 
+
 Vue.use(VueRouter);
 Vue.use(antui);
 Vue.use(Button);
@@ -30,8 +31,6 @@ const formatRoutes = (routes) => {
             if (route.children) {
                 route.children = formatRoutes(route.children)
             }
-
-            console.log(route.path)
             let fmtRoute = {
                 path: route.path,
                 component: resolve => {
@@ -55,10 +54,8 @@ const initAdminMenu = (router, store) => {
     }
     axios.get('/menu').then(resp => {
         if (resp && resp.status === 200) {
-
-            console.log(resp.status + " " + resp.data + " " )
+            console.log(resp.data)
             let fmtRoutes = formatRoutes(resp.data)
-            console.log(resp +" " + resp)
             router.addRoutes(fmtRoutes)
             store.commit('initAdminMenu', fmtRoutes)
         }
@@ -70,6 +67,14 @@ const initAdminMenu = (router, store) => {
  */
 router.beforeEach((to, from, next) => {
         if (store.state.username && to.path.startsWith('/admin')) {
+            initAdminMenu(router, store)
+        }
+        //已登录状态下，访问个人中心提前加载menu，防止computed加载滞后问题
+        if (store.state.username && to.path.startsWith('/library')) {
+            initAdminMenu(router, store)
+        }
+        //已登录状态下，访问个人中心提前加载menu，防止computed加载滞后问题
+        if (store.state.username && to.path.startsWith('/index')) {
             initAdminMenu(router, store)
         }
         // 已登录状态下访问 login 页面直接跳转到后台首页
@@ -94,10 +99,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 )
-
-
-
-
 
 new Vue({
     el: '#app',

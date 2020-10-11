@@ -51,8 +51,10 @@ export default {
                 username: [{required: true, message: '账号不能为空', trigger: 'blur'},],
                 password: [{required: true, message: '密码不能为空', trigger: 'blur'},],
                 name: [{required: true, message: '姓名不能为空', trigger: 'change'},],
-                phone: [{required: true, message: '电话号码不能为空', trigger: 'change'},],
-                email: [{required: true, message: '邮箱地址不能为空', trigger: 'change'},],
+                phone: [{required: true, message: '电话号码不能为空', trigger: 'change'},
+                    {pattern:/^0?(13[0-9]|15[7-9]|153|156|18[7-9]|198)[0-9]{8}$/,min:11,max:11,message: '输入的手机号码有误',trigger: 'blur'}],
+                email: [{required: true, message: '邮箱地址不能为空', trigger: 'change'},
+                    { pattern:/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,message: '邮箱地址有误'}],
             },
             checked: true
         }
@@ -61,19 +63,15 @@ export default {
         register(formName) {
             const _this = this
             this.$refs[formName].validate((valid) => {
-                //参数合法，提交表单
                 if (valid) {
                     this.$axios.post('/register', this.loginForm).then((resp) => {
                         if (resp.data.code === 200) {
-                            console.log(resp.data.code)
                             this.$alert('注册成功', '提示', {
                                 confirmButtonText: '确定'
                             })
                             _this.$router.replace('/login')
                         }
-                        //参数不合法，控制台打印信息
                         else {
-                            console.log(resp.data.code)
                             this.$alert(resp.data.message, '提示', {
                                 confirmButtonText: '确定'
                             })

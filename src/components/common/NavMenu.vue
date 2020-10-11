@@ -1,5 +1,5 @@
 <template>
-<!--   使用router模式时会在激活导航时以index为path进行跳转-->
+    <!--   使用router模式时会在激活导航时以index为path进行跳转-->
     <el-menu
         :default-active="$route.path"
         router
@@ -11,39 +11,66 @@
         <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
             {{ item.navItem }}
         </el-menu-item>
-        <el-button type="danger" icon="el-icon-switch-button" circle v-on:click="logout" style="font-size: 24px;float: right;margin-right: 30px;margin-top: 5px"></el-button>
-<!--        <i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px;float: right;margin-right: 10px;margin-top: 10px"></i>-->
-<!--        <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M511.981761 1024a811.427093 811.427093 0 0 0-511.981761-176.249721V300.825763a811.427093 811.427093 0 0 1 511.981761 176.249721A811.491091 811.491091 0 0 1 1023.963521 300.825763v546.924516A811.491091 811.491091 0 0 0 511.981761 1024z m415.98518-621.161871a704.614898 704.614898 0 0 0-355.507335 148.794699L511.981761 600.687081l-60.477846-49.054253A704.486903 704.486903 0 0 0 95.99658 402.838129v353.747398a908.767625 908.767625 0 0 1 415.985181 148.122723 908.767625 908.767625 0 0 1 415.98518-148.122723V402.838129zM511.469779 298.361851a149.178686 149.178686 0 1 1 149.146687-149.178686 149.306681 149.306681 0 0 1-149.146687 149.178686z" fill="#0590DF" style="float:right;color: #222;padding-top: 8px"></path></svg>-->
+        <div class="avatar">
+            <el-button circle size="mini" style="float: right;margin-right: 30px">
+                <el-dropdown :hide-on-click="false" @command="handleCommand">
+                    <div>
+                        <el-avatar class="avatar" :size="40" style="background-color: #71adea">
+                            {{ press.slice(0,1).toUpperCase() }}
+                        </el-avatar>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="a">
+                            <div>
+                                个人信息
+                            </div>
+                        </el-dropdown-item>
+                        <el-dropdown-item divided command="b">
+                            <div>
+                                退出
+                            </div>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-button>
+        </div>
+
         <span style="position: absolute;padding-top: 10px;right: 47%;font-size: 28px;font-weight: bold">云中书</span>
-        <span style="position: absolute;padding-top: 18px;right: 12%;font-size: 18px">欢迎: {{press}}</span>
     </el-menu>
 </template>
 
 <script>
 export default {
     name: "NavMenu",
-    data () {
+    data() {
         return {
             navList: [
                 {name: '/index', navItem: '首页'},
                 {name: '/wantedlist', navItem: '收藏夹'},
                 {name: '/library', navItem: '图书馆'},
-                {name: '/admin', navItem: '个人中心'}
+                {name: '/userinfo', navItem: '个人中心'},
+                {name: '/admin', navItem: '后台管理'}
             ],
             activeIndex: "",
             press: JSON.parse(window.localStorage.getItem('username' || '[]'))
         }
     },
     methods: {
-        logout () {
+        logout() {
             let _this = this;
             this.$axios.get('/logout').then(resp => {
                 if (resp.data.code === 200) {
-                    // 前后端状态保持一致
                     _this.$store.commit('logout')
                     _this.$router.replace('/login')
                 }
             })
+        },
+        handleCommand(command) {
+            if (command === "a") {
+                this.$router.replace('/userinfo')
+            } else if (command === "b") {
+                this.logout()
+            }
         }
 
     }
@@ -51,7 +78,7 @@ export default {
 </script>
 
 <style scoped>
-a{
+a {
     text-decoration: none;
 }
 
@@ -61,7 +88,12 @@ span {
 
 .el-icon-switch-button {
     cursor: pointer;
-    outline:0;
+    outline: 0;
+}
+
+.avatar {
+    cursor: pointer;
+    outline: 0;
 }
 
 </style>

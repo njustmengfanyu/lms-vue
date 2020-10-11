@@ -5,9 +5,29 @@
             <a-icon type="left"/>
             返回前台
         </a-button>
-        <el-button type="danger" icon="el-icon-switch-button" circle v-on:click="logout"
-                   style="font-size: 24px;float: right;margin-right: 10px;margin-top: -5px"></el-button>
-        <!--    <i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px;float: right"></i>-->
+        <div class="avatar">
+            <el-button circle size="mini" style="float: right;margin-right: 30px;margin-top: -50px">
+                <el-dropdown :hide-on-click="false" @command="handleCommand">
+                    <div>
+                        <el-avatar class="avatar">
+                            {{ press.slice(0,1).toUpperCase() }}
+                        </el-avatar>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="a">
+                            <div>
+                                个人信息
+                            </div>
+                        </el-dropdown-item>
+                        <el-dropdown-item divided command="b">
+                            <div>
+                                退出
+                            </div>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-button>
+        </div>
     </el-card>
 </template>
 
@@ -16,6 +36,11 @@ import {createRouter} from '@/router'
 
 export default {
     name: 'Header',
+    data() {
+        return {
+            press: JSON.parse(window.localStorage.getItem('username' || '[]'))
+        }
+    },
     methods: {
         logout() {
             let _this = this;
@@ -36,6 +61,13 @@ export default {
             // 清空路由，防止路由重复加载
             const newRouter = createRouter()
             _this.$router.matcher = newRouter.matcher
+        },
+        handleCommand(command) {
+            if (command === "a") {
+                this.$router.replace('/userinfo')
+            } else if (command === "b") {
+                this.logout()
+            }
         }
     }
 }
@@ -48,7 +80,6 @@ export default {
     height: 80px;
     opacity: 0.85;
     line-height: 40px;
-    /*min-width: 900px;*/
     margin-left: 15px;
 }
 

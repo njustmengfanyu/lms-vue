@@ -39,6 +39,24 @@ export default {
         currentPath() {
             return this.$route.path
         }
+    },
+    mounted() {
+        this.callBack()
+    },
+    methods: {
+        callBack() {
+            if (this.$store.state.adminMenus.length === 0) {
+                this.$alert('您没有权限访问该页面', '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$router.replace('/library')
+                    }
+                });
+
+            } else {
+
+            }
+        }
     }
 }
 </script>
