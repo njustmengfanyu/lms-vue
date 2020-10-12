@@ -20,7 +20,7 @@
             </el-form-item>
             <el-form-item prop="email">
                 <el-input type="text" v-model="loginForm.email"
-                          auto-complete="off" placeholder="E-Mail"></el-input>
+                          auto-complete="on" placeholder="电子邮箱"></el-input>
             </el-form-item>
             <el-form-item style="width: 100%">
                 <el-button type="primary" style="width: 80%;background: #3d94e3;border: none"

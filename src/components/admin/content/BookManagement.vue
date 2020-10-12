@@ -129,7 +129,14 @@
                     <el-input v-model="form.author" autocomplete="off" :placeholder="dialogForm_author"></el-input>
                 </el-form-item>
                 <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
-                    <el-input v-model="form.date" autocomplete="off" :placeholder="dialogForm_date"></el-input>
+<!--                    <el-input v-model="form.date" autocomplete="off" :placeholder="dialogForm_date"></el-input>-->
+                    <el-date-picker
+                        v-model="form.date"
+                        type="date"
+                        placeholder="选择日期"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="出版社" :label-width="formLabelWidth" prop="press">
                     <el-input v-model="form.press" autocomplete="off" :placeholder="dialogForm_press"></el-input>
@@ -172,7 +179,14 @@
                     <el-input v-model="form.author" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
-                    <el-input v-model="form.date" autocomplete="off"></el-input>
+<!--                    <el-input v-model="form.date" autocomplete="off"></el-input>-->
+                    <el-date-picker
+                        v-model="form.date"
+                        type="date"
+                        placeholder="选择日期"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="yyyy-MM-dd">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="出版社" :label-width="formLabelWidth" prop="press">
                     <el-input v-model="form.press" autocomplete="off"></el-input>
@@ -434,7 +448,7 @@ export default {
             MessageBox.confirm('确认关闭？')
                 .then(_ => {
                     done();
-                    this.resetForm('loginForm')
+                    this.resetForm('form')
                 })
                 .catch(_ => {});
         },
