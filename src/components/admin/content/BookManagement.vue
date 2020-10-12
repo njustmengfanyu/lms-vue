@@ -440,7 +440,6 @@ export default {
         this.listBooks()
     },
     methods: {
-
         addNode() {
             this.dialogFormVisible_add = true
         },

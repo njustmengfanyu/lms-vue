@@ -6,7 +6,7 @@
         <el-main>
             <div class="wantedlistarea">
                 <el-row style="height: 840px;">
-                    <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
+<!--                    <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>-->
                     <el-popover placement="right" trigger="hover" width="60"
                                 v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                                 v-bind:key="item.id">
