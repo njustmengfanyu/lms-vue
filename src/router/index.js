@@ -12,6 +12,7 @@ import LibraryIndex from '../components/library/LibraryIndex'
 import wantedlist from '@/components/wantedlist'
 import Element from 'element-ui'
 import userinfo from '@/components/UserInfo'
+import showinwantedlist from '@/components/showinwantedlist'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Element)
@@ -49,14 +50,8 @@ const routes = [
                     requireAuth: true
                 }
             },
-            {
-                path: "/show",
-                name: "show",
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: show
-            },
+
+
             {
                 path: '/userinfo',
                 name: 'userinfo',
@@ -84,6 +79,16 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: "/showinwantedlist",
+        name: "showinwantedlist",
+        component: showinwantedlist
+    },
+    {
+        path: "/show",
+        name: "show",
+        component: show
     },
     {
         path: "/wantedlist",
@@ -150,22 +155,24 @@ export const createRouter = routes => new Router(
                     requireAuth: true
                 }
             },
-            {
-                path: '/wantedlist',
-                name: 'wantedlist',
-                component: wantedlist,
-                meta: {
-                    requireAuth: true
-                }
-            },
+            // {
+            //     path: '/wantedlist',
+            //     name: 'wantedlist',
+            //     component: wantedlist,
+            //     meta: {
+            //         requireAuth: true
+            //     }
+            // },
             {
                 path: "/show",
                 name: "show",
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
                 component: show
             },
+            // {
+            //     path: "/showinwantedlist",
+            //     name: "showinwantedlist",
+            //     component: showinwantedlist
+            // },
             {
                 path: '/userinfo',
                 name: 'userinfo',
@@ -193,6 +200,11 @@ export const createRouter = routes => new Router(
                 }
             }
         ]
+    },
+    {
+        path: "/showinwantedlist",
+        name: "showinwantedlist",
+        component: showinwantedlist
     },
     {
         path: "/wantedlist",

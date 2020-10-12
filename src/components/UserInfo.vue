@@ -14,6 +14,12 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
                     <el-input v-model="form.email" autocomplete="off" :placeholder="dialogForm_email" readonly></el-input>
                 </el-form-item>
+                <el-form-item>
+                    <div style="float: right;font-size: 16px">
+                        如需修改信息，请联系管理员修改<br>管理员联系方式：13578945211
+                    </div>
+
+                </el-form-item>
             </el-form>
         </el-card>
     </div>

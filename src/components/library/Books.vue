@@ -20,7 +20,6 @@
                         <div class="title">
                             <a href="">{{ item.bookname }}</a>
                         </div>
-                        <!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
                         <i class="el-icon-plus" @click="wantedlist(item.id)"></i>
                     </div>
                     <div class="author">{{ item.author }}</div>

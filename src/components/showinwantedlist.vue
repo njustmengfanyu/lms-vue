@@ -27,8 +27,8 @@
                         <div style="padding-top: 15px; ">
                             <span style="width:500px; font-size: 28px">信息概览</span>
                             <div class="bottom clearfix">
-                                <el-button type="primary" class="button" icon="el-icon-star-on"
-                                           style="height: 35px;width: 130px" @click="wantedlist(book.id)">点击收藏
+                                <el-button type="info" disabled class="button"
+                                           style="height: 35px;width: 180px" @click="wantedlist(book.id)">已经在收藏夹中了
                                 </el-button>
                                 <el-button type="primary" class="button1" icon="el-icon-back"
                                            style="height: 35px;width: 40px" @click="back()">
@@ -48,7 +48,7 @@ import {MessageBox} from 'element-ui'
 import {Message} from 'element-ui'
 
 export default {
-    name: "show",
+    name: "showinwantedlist",
     //components: {NavMenu},
     data() {
         return {
@@ -181,3 +181,4 @@ time {
 }
 
 </style>
+

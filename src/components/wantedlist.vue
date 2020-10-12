@@ -5,18 +5,14 @@
             <el-popover placement="right" trigger="hover" width="250"
                         v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                         v-bind:key="item.id">
-<!--                <div>{{ item.bookname }}<br/><br/>{{ item.author }} / {{ item.date }} /-->
-<!--                    {{ item.press }}<br/><br/>{{ item.abs }}-->
-<!--                </div>-->
                 <div>点击查看详情</div>
 
                 <el-card slot="reference"
                          style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px"
                          class="book"
                          body-style="padding:10px" shadow="hover">
-                    <!--                    <div class="cover" @click="editBook(item)">-->
                     <div class="cover">
-                        <a slot="actions" :href="'/show?id='+item.id">
+                        <a slot="actions" :href="'/showinwantedlist?id='+item.id">
                             <img :src="item.cover" alt="封面">
                         </a>
                     </div>
@@ -24,7 +20,6 @@
                         <div class="title">
                             <a href="">{{ item.bookname }}</a>
                         </div>
-                        <!--                        <i class="el-icon-star-off" @click="deleteBook(item.id)"></i>-->
                         <i class="el-icon-delete" @click="deleteWantedList(item.id)"></i>
                     </div>
                     <div class="author">{{ item.author }}</div>
@@ -40,7 +35,6 @@
                 :total="books.length">
             </el-pagination>
         </el-row>
-
     </div>
 </template>
 
@@ -56,7 +50,6 @@ export default {
     components: {Books, EditForm, SearchBar},
     data() {
         return {
-
             users: [],
             books: [],
             currentPage: 1,

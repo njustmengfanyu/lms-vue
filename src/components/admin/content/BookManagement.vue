@@ -119,8 +119,9 @@
         <el-dialog
             title="修改图书"
             :visible.sync="dialogFormVisible"
+            :before-close="handleClose"
             @close="clear">
-            <el-form v-model="form" style="text-align: left" ref="dataForm">
+            <el-form :model="form" style="text-align: left" ref="form" :rules="editrules">
                 <el-form-item label="书名" :label-width="formLabelWidth" prop="bookname">
                     <el-input v-model="form.bookname" autocomplete="off" :placeholder="dialogForm_bookname"></el-input>
                 </el-form-item>
@@ -151,21 +152,19 @@
                         <el-option label="科幻" value="6"></el-option>
                     </el-select>
                 </el-form-item>
-                <!--                <el-form-item label="状态" :label-width="formLabelWidth" prop="enabled">-->
-                <!--                    <el-input v-model="form.enabled" autocomplete="off"></el-input>-->
-                <!--                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="onSubmit">确 定</el-button>
+                <el-button @click="dialogFormVisible = false;resetForm('form')">取 消</el-button>
+                <el-button type="primary" @click="onSubmit('form')">确 定</el-button>
             </div>
         </el-dialog>
 
         <el-dialog
             title="添加图书"
             :visible.sync="dialogFormVisible_add"
+            :before-close="handleClose"
             @close="clear">
-            <el-form v-model="form" style="text-align: left" ref="dataForm">
+            <el-form :model="form" style="text-align: left" ref="form" :rules="addrules">
                 <el-form-item label="书名" :label-width="formLabelWidth" prop="bookname">
                     <el-input v-model="form.bookname" autocomplete="off" placeholder="不加《》"></el-input>
                 </el-form-item>
@@ -183,7 +182,7 @@
                     <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
                 </el-form-item>
                 <el-form-item label="简介" :label-width="formLabelWidth" prop="abs">
-                    <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
+                    <el-input type="textarea" v-model="form.abs" maxlength="200" show-word-limit autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
                     <el-select v-model="form.category.id" placeholder="请选择分类">
@@ -195,14 +194,13 @@
                         <el-option label="科幻" value="6"></el-option>
                     </el-select>
                 </el-form-item>
-                <!--                <el-form-item prop="id" style="height: 0">-->
-                <!--                    <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>-->
-                <!--                </el-form-item>-->
+                <el-form-item>
+                    <div class="dialog-footer" style="float: right">
+                        <el-button @click="dialogFormVisible_add = false;resetForm('form')">取 消</el-button>
+                        <el-button type="primary" @click="onSubmit_add('form')">确 定</el-button>
+                    </div>
+                </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible_add = false">取 消</el-button>
-                <el-button type="primary" @click="onSubmit_add">确 定</el-button>
-            </div>
         </el-dialog>
 
     </div>
@@ -212,8 +210,8 @@
 const data = [];
 let obj = {};
 // import BulkRegistration from './BulkRegistration'
-//2020.9.20 15.05 xiugaiqian
 import ImgUpload from '../../library/ImgUpload'
+import {MessageBox} from 'element-ui'
 
 export default {
 
@@ -223,6 +221,24 @@ export default {
     data() {
         this.cacheData = data.map(item => ({...item}));
         return {
+            addrules: {
+                bookname: [{required: true, message: '书名不能为空', trigger: 'change'}],
+                author: [{required: true, message: '作者不能为空', trigger: 'change'}],
+                date: [{required: true, message: '出版日期不能为空', trigger: 'change'}],
+                press: [{required: true, message: '出版社不能为空', trigger: 'change'}],
+                cover: [{required: true, message: '封面不能为空', trigger: 'change'},],
+                abs: [{required: true, message: '简介不能为空', trigger: 'change'},],
+                //cid: [{required: true, message: '图书种类不能为空', trigger: 'change'},]
+            },
+            editrules: {
+                bookname: [{required: true, message: '书名不能为空', trigger: 'change'}],
+                author: [{required: true, message: '作者不能为空', trigger: 'change'}],
+                date: [{required: true, message: '出版日期不能为空', trigger: 'change'}],
+                press: [{required: true, message: '出版社不能为空', trigger: 'change'}],
+                cover: [{required: true, message: '封面不能为空', trigger: 'change'},],
+                abs: [{required: true, message: '简介不能为空', trigger: 'change'},],
+                //cid: [{required: true, message: '图书种类不能为空', trigger: 'change'},]
+            },
             dialogFormVisible: false,
             dialogFormVisible_add: false,
             dialogForm_id: 0,
@@ -246,7 +262,7 @@ export default {
                     name: ''
                 },
             },
-            formLabelWidth: '120px',
+            formLabelWidth: '90px',
 
             data,
             searchText: '',
@@ -364,50 +380,6 @@ export default {
                         }
                     },
                 },
-                /*{
-                  title: '封面',
-                  dataIndex: 'cover',
-                  key: 'cover',
-                  scopedSlots: {
-                    filterDropdown: 'filterDropdown',
-                    filterIcon: 'filterIcon',
-                    customRender: 'cover',
-                  },
-                  onFilter: (value, record) =>
-                      record.cover
-                          .toString()
-                          .toLowerCase()
-                          .includes(value.toLowerCase()),
-                  onFilterDropdownVisibleChange: visible => {
-                    if (visible) {
-                      setTimeout(() => {
-                        this.searchInput.focus();
-                      });
-                    }
-                  },
-                },
-                {
-                  title: '简述',
-                  dataIndex: 'abs',
-                  key: 'abs',
-                  scopedSlots: {
-                    filterDropdown: 'filterDropdown',
-                    filterIcon: 'filterIcon',
-                    customRender: 'abs',
-                  },
-                  onFilter: (value, record) =>
-                      record.abs
-                          .toString()
-                          .toLowerCase()
-                          .includes(value.toLowerCase()),
-                  onFilterDropdownVisibleChange: visible => {
-                    if (visible) {
-                      setTimeout(() => {
-                        this.searchInput.focus();
-                      });
-                    }
-                  },
-                },*/
                 {
                     title: '分类',
                     dataIndex: 'category.name',
@@ -458,6 +430,17 @@ export default {
         addNode() {
             this.dialogFormVisible_add = true
         },
+        handleClose(done) {
+            MessageBox.confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                    this.resetForm('loginForm')
+                })
+                .catch(_ => {});
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
         clear_add() {
             this.form = {
                 id: '',
@@ -474,31 +457,35 @@ export default {
             }
             this.$refs.imgUpload.$refs.upload.clearFiles()
         },
-        onSubmit_add() {
-            this.$axios
-                .post('/admin/content/books', {
-                    id: this.form.id,
-                    cover: this.form.cover,
-                    bookname: this.form.bookname,
-                    author: this.form.author,
-                    date: this.form.date,
-                    press: this.form.press,
-                    abs: this.form.abs,
-                    category: this.form.category
-                }).then(resp => {
-                if (resp && resp.status === 200) {
-                    this.dialogFormVisible_add = false
-                    this.$emit('onSubmit_add')
-                    this.listBooks()
-                    this.$message.success('添加成功')
-                } else {
-                    console.log(resp.status)
-                    this.$message.error('提交错误')
+        onSubmit_add(formName) {
+            let _this = this
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$axios
+                        .post('/admin/content/books', {
+                            id: this.form.id,
+                            cover: this.form.cover,
+                            bookname: this.form.bookname,
+                            author: this.form.author,
+                            date: this.form.date,
+                            press: this.form.press,
+                            abs: this.form.abs,
+                            category: this.form.category
+                        }).then(resp => {
+                        if (resp && resp.status === 200) {
+                            _this.dialogFormVisible_add = false
+                            //this.$emit('onSubmit_add')
+                            _this.listBooks()
+                            _this.$message.success('添加成功')
+                        } else {
+                            _this.$message.error('提交错误')
+                        }
+                    })
+                        .catch(err => {
+                            this.$message.error('服务器错误')
+                        })
                 }
             })
-                .catch(err => {
-                    this.$message.error('服务器错误')
-                })
         },
 
 
@@ -517,37 +504,44 @@ export default {
                 }
             }
             this.$refs.imgUpload.$refs.upload.clearFiles()
-        },
-        onSubmit() {
-            this.$axios
-                .post('/admin/content/books', {
-                    id: this.form.id,
-                    cover: this.form.cover,
-                    bookname: this.form.bookname,
-                    author: this.form.author,
-                    date: this.form.date,
-                    press: this.form.press,
-                    abs: this.form.abs,
-                    category: this.form.category
-                }).then(resp => {
-                if (resp && resp.status === 200) {
-                    console.log(resp.status)
-                    this.dialogFormVisible = false
-                    this.$emit('onSubmit')
-                    this.listBooks()
-                    this.$message.success('修改成功')
-                } else {
-                    console.log(resp.status)
-                    this.$message.error('提交错误')
+        }
+        ,
+        onSubmit(formName) {
+            let _this = this
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$axios
+                        .post('/admin/content/books', {
+                            id: this.form.id,
+                            cover: this.form.cover,
+                            bookname: this.form.bookname,
+                            author: this.form.author,
+                            date: this.form.date,
+                            press: this.form.press,
+                            abs: this.form.abs,
+                            category: this.form.category
+                        }).then(resp => {
+                        if (resp && resp.status === 200) {
+                            _this.dialogFormVisible = false
+                            //this.$emit('onSubmit')
+                            _this.listBooks()
+                            _this.$message.success('修改成功')
+                        } else {
+                            _this.$message.error('提交错误')
+                        }
+                    })
+                        .catch(err => {
+                            _this.$message.error('服务器错误')
+                        })
                 }
             })
-                .catch(err => {
-                    this.$message.error('服务器错误')
-                })
-        },
+
+        }
+        ,
         uploadImg() {
             this.form.cover = this.$refs.imgUpload.url
-        },
+        }
+        ,
 
         listBooks() {
             let _this = this
@@ -556,7 +550,8 @@ export default {
                     _this.data = resp.data.data
                 }
             })
-        },
+        }
+        ,
 
         //demo
         start() {
@@ -566,11 +561,13 @@ export default {
                 this.loading = false;
                 this.selectedRowKeys = [];
             }, 500);
-        },
+        }
+        ,
         onSelectChange(selectedRowKeys) {
             console.log('selectedRowKeys changed: ', selectedRowKeys);
             this.selectedRowKeys = selectedRowKeys;
-        },
+        }
+        ,
         onDelete(id) {
             let _this = this
             const data = [...this.data];
@@ -580,17 +577,20 @@ export default {
                     this.listBooks()
                 }
             })
-        },
+        }
+        ,
         handleSearch(selectedKeys, confirm, dataIndex) {
             confirm();
             this.searchText = selectedKeys[0];
             this.searchedColumn = dataIndex;
-        },
+        }
+        ,
 
         handleReset(clearFilters) {
             clearFilters();
             this.searchText = '';
-        },
+        }
+        ,
         handleAdd() {
             const {count, data} = this;
             const newData = {
@@ -600,7 +600,8 @@ export default {
                 name: `London, Park Lane no. ${count}`,
             };
             this.data = [...data, newData];
-        },
+        }
+        ,
         handleChange(value, id, column) {
             const newData = [...this.data];
             const target = newData.filter(item => id === item.id)[0];
@@ -609,7 +610,8 @@ export default {
                 target[column] = value;
                 this.data = newData;
             }
-        },
+        }
+        ,
         edit(id) {
             const newData = [...this.data];
             const target = newData.filter(item => id === item.id)[0];
@@ -618,7 +620,8 @@ export default {
                 target.editable = true;
                 this.data = newData;
             }
-        },
+        }
+        ,
         save(id) {
             let _this = this
             const newData = [...this.data];
@@ -646,7 +649,8 @@ export default {
                         this.$alert(resp.data.message)
                     }
                 })
-        },
+        }
+        ,
         cancel(id) {
             const newData = [...this.data];
             const target = newData.filter(item => id === item.id)[0];
@@ -656,7 +660,8 @@ export default {
                 delete target.editable;
                 this.data = newData;
             }
-        },
+        }
+        ,
         editNode: function (item) {
             console.log(item)
             this.dialogFormVisible = true
