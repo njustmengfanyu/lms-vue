@@ -456,6 +456,7 @@ export default {
                                 _this.dialogFormVisible_add = false
                                 _this.clear_add()
                                 _this.listUsers()
+                                _this.resetForm('loginForm')
                                 // this.$emit('onSubmit_add')
                             } else {
                                 _this.$alert(resp.data.message, '提示', {
@@ -502,6 +503,7 @@ export default {
                 if (resp && resp.data.code === 200) {
                     this.dialogFormVisible = false
                     this.$emit('onSubmit')
+                    this.resetForm('loginForm')
                     this.$message.success(resp.data.message)
                     this.listUsers()
                 } else {
