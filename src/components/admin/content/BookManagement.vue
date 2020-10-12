@@ -139,7 +139,7 @@
                     <img-upload @onUpload="uploadImg" ref="imgUpload" :placeholder="dialogForm_cover"></img-upload>
                 </el-form-item>
                 <el-form-item label="简介" :label-width="formLabelWidth" prop="abs">
-                    <el-input type="textarea" v-model="form.abs" autocomplete="off"
+                    <el-input type="textarea" v-model="form.abs" maxlength="200" show-word-limit  autocomplete="off"
                               :placeholder="dialogForm_abs"></el-input>
                 </el-form-item>
                 <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
