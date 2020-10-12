@@ -1,41 +1,49 @@
 <template>
-    <div class="wantedlistarea">
-        <el-row style="height: 840px;">
-            <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
-            <el-popover placement="right" trigger="hover" width="250"
-                        v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-                        v-bind:key="item.id">
-                <div>点击查看详情</div>
+    <el-container>
+        <el-aside style="width: 200px;margin-top: 20px">
 
-                <el-card slot="reference"
-                         style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px"
-                         class="book"
-                         body-style="padding:10px" shadow="hover">
-                    <div class="cover">
-                        <a slot="actions" :href="'/showinwantedlist?id='+item.id">
-                            <img :src="item.cover" alt="封面">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <div class="title">
-                            <a href="">{{ item.bookname }}</a>
-                        </div>
-                        <i class="el-icon-delete" @click="deleteWantedList(item.id)"></i>
-                    </div>
-                    <div class="author">{{ item.author }}</div>
-                </el-card>
-            </el-popover>
-        </el-row>
-        <el-row>
-            <el-pagination
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-size.sync="pagesize"
-                :page-sizes="[18]"
-                :total="books.length">
-            </el-pagination>
-        </el-row>
-    </div>
+        </el-aside>
+        <el-main>
+            <div class="wantedlistarea">
+                <el-row style="height: 840px;">
+                    <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
+                    <el-popover placement="right" trigger="hover" width="60"
+                                v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                                v-bind:key="item.id">
+                        <div>点击查看详情</div>
+
+                        <el-card slot="reference"
+                                 style="width: 135px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px"
+                                 class="book"
+                                 body-style="padding:10px" shadow="hover">
+                            <div class="cover">
+                                <a slot="actions" :href="'/showinwantedlist?id='+item.id">
+                                    <img :src="item.cover" alt="封面">
+                                </a>
+                            </div>
+                            <div class="info">
+                                <div class="title">
+                                    <a href="">{{ item.bookname }}</a>
+                                </div>
+                                <i class="el-icon-delete" @click="deleteWantedList(item.id)"></i>
+                            </div>
+                            <div class="author">{{ item.author }}</div>
+                        </el-card>
+                    </el-popover>
+                </el-row>
+                <el-row>
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-size.sync="pagesize"
+                        :page-sizes="[18]"
+                        :total="books.length">
+                    </el-pagination>
+                </el-row>
+            </div>
+        </el-main>
+    </el-container>
+
 </template>
 
 <script>

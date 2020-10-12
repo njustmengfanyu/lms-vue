@@ -74,6 +74,10 @@ router.beforeEach((to, from, next) => {
             initAdminMenu(router, store)
         }
         //已登录状态下，访问个人中心提前加载menu，防止computed加载滞后问题
+        if (store.state.username && to.path.startsWith('/wantedlist')) {
+            initAdminMenu(router, store)
+        }
+        //已登录状态下，访问个人中心提前加载menu，防止computed加载滞后问题
         if (store.state.username && to.path.startsWith('/index')) {
             initAdminMenu(router, store)
         }
