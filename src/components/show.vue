@@ -83,9 +83,10 @@ export default {
                     bid: id,
                     username: JSON.parse(window.localStorage.getItem('username' || '[]'))
                 }).then(resp => {
-                    if (resp && resp.status === 200) {
-                        console.log("wantedlist " + id + " " + JSON.parse(window.localStorage.getItem('username' || '[]')))
+                    if (resp && resp.data.code === 200) {
                         Message.success("添加成功")
+                    } else {
+                        Message.error(resp.data.message)
                     }
                 })
                 this.isLiked = 1

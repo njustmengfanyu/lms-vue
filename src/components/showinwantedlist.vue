@@ -84,7 +84,6 @@ export default {
                     username: JSON.parse(window.localStorage.getItem('username' || '[]'))
                 }).then(resp => {
                     if (resp && resp.status === 200) {
-                        console.log("wantedlist " + id + " " + JSON.parse(window.localStorage.getItem('username' || '[]')))
                         Message.success("添加成功")
                     }
                 })
