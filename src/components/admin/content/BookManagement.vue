@@ -122,6 +122,10 @@
             :before-close="handleClose"
             @close="clear">
             <el-form :model="form" style="text-align: left" ref="form" :rules="editrules">
+                <el-form-item label="id" :label-width="formLabelWidth" prop="id">
+                    <el-input v-model="form.id" autocomplete="off" :placeholder="dialogForm_id"
+                              :disabled="true"></el-input>
+                </el-form-item>
                 <el-form-item label="书名" :label-width="formLabelWidth" prop="bookname">
                     <el-input v-model="form.bookname" autocomplete="off" :placeholder="dialogForm_bookname"></el-input>
                 </el-form-item>
@@ -129,7 +133,6 @@
                     <el-input v-model="form.author" autocomplete="off" :placeholder="dialogForm_author"></el-input>
                 </el-form-item>
                 <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
-<!--                    <el-input v-model="form.date" autocomplete="off" :placeholder="dialogForm_date"></el-input>-->
                     <el-date-picker
                         v-model="form.date"
                         type="date"
@@ -179,7 +182,6 @@
                     <el-input v-model="form.author" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
-<!--                    <el-input v-model="form.date" autocomplete="off"></el-input>-->
                     <el-date-picker
                         v-model="form.date"
                         type="date"
@@ -489,6 +491,7 @@ export default {
                             _this.dialogFormVisible_add = false
                             //this.$emit('onSubmit_add')
                             _this.listBooks()
+                            _this.resetForm('form')
                             _this.$message.success('添加成功')
                         } else {
                             _this.$message.error('提交错误')
@@ -525,7 +528,7 @@ export default {
                 if (valid) {
                     this.$axios
                         .post('/admin/content/books', {
-                            id: this.form.id,
+                            id: this.dialogForm_id,
                             cover: this.form.cover,
                             bookname: this.form.bookname,
                             author: this.form.author,
@@ -536,8 +539,9 @@ export default {
                         }).then(resp => {
                         if (resp && resp.status === 200) {
                             _this.dialogFormVisible = false
-                            //this.$emit('onSubmit')
+                            _this.$emit('onSubmit')
                             _this.listBooks()
+                            _this.resetForm('form')
                             _this.$message.success('修改成功')
                         } else {
                             _this.$message.error('提交错误')
